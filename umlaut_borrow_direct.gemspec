@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
   
   s.add_dependency "umlaut", "~> 4.0"
+  s.add_dependency "borrow_direct", "< 2"
 
   s.add_development_dependency "mysql2"
 end
