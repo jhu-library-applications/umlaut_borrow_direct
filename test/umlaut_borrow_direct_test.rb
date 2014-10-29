@@ -1,7 +1,22 @@
 require 'test_helper'
 
 class UmlautBorrowDirectTest < ActiveSupport::TestCase
-  test "truth" do
-    assert_kind_of Module, UmlautBorrowDirect
+
+  def test_custom_service_types_added  
+    %w{bd_link_to_search bd_actionable_request bd_not_available bd_request_placed}.each do |v|
+      assert ServiceTypeValue.find(v).present?
+    end
   end
+
+  def test_custom_service_types_labelled
+    %w{bd_link_to_search bd_actionable_request bd_not_available bd_request_placed}.each do |v|
+      st = ServiceTypeValue.find(v)
+
+      I18n.locale = :en
+
+      assert_equal "BorrowDirect Availability", st.display_name
+    end
+  end
+
+
 end

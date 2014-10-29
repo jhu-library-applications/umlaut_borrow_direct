@@ -1,0 +1,16 @@
+en:
+  umlaut:
+    service_type_names:
+      bd_link_to_search:
+        one: BorrowDirect Availability
+        other: BorrowDirect Availability
+      bd_actionable_request: 
+        one: BorrowDirect Availability
+        other: BorrowDirect Availability
+      bd_not_available:
+        one: BorrowDirect Availability
+        other: BorrowDirect Availability
+      bd_request_placed:
+        one: BorrowDirect Availability
+        other: BorrowDirect Availability
+
