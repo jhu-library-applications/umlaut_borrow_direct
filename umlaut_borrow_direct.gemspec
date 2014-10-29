@@ -20,4 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency "borrow_direct", "< 2"
 
   s.add_development_dependency "mysql2"
+  s.add_development_dependency "minitest-spec-rails"
+  s.add_development_dependency "minitest-vcr"
 end
