@@ -6,7 +6,7 @@ class BorrowDirectAdaptor < Service
   required_config_params :library_symbol, :find_item_patron_barcode
 
   def service_types_generated
-    return [:bd_link_to_search, :bd_actionable_request, :bd_not_available, :bd_request_placed]
+    return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placed]]
   end
 
   def handle(request)
@@ -28,20 +28,20 @@ class BorrowDirectAdaptor < Service
           # Mark it requestable!
           request.add_service_response( 
             :service=>self, 
-            :display_text => "TBD", 
+            :display_text => "TBD REQUEST PROMPT", 
             :service_type_value => :bd_request_prompt,
             :pickup_locations => response.pickup_locations)
         else
           request.add_service_response( 
             :service=>self, 
-            :display_text => "TBD", 
+            :display_text => "TBD NOT AVAILABLE", 
             :service_type_value => :bd_not_available)
         end
       rescue BorrowDirect::Error => e 
         # BD didn't let us check availability, log it and give them
         # a consolation direct link response
         Rails.logger.error("BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n   #{e.inspect}\n   #{request.inspect}")
-        
+
         make_link_to_search_response(request)
       end
     else
@@ -73,7 +73,7 @@ class BorrowDirectAdaptor < Service
 
     request.add_service_response( 
       :service=>self, 
-      :display_text => "TBD", 
+      :display_text => "TBD LINK TO SEARCH", 
       :url => url, 
       :service_type_value => :bd_link_to_search)
   end
