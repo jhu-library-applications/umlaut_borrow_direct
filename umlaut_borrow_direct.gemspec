@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mysql2"
 
   s.add_development_dependency "minitest", "~> 5.0"
-  s.add_development_dependency "minitest-rails", "~> 2.1"
+  s.add_development_dependency "minitest-spec-rails"
 
   s.add_development_dependency "minitest-vcr", ">= 1.0.2", "< 2"
   s.add_development_dependency "vcr", "~> 2.9"
