@@ -4,7 +4,7 @@ en:
       bd_link_to_search:
         one: BorrowDirect Availability
         other: BorrowDirect Availability
-      bd_actionable_request: 
+      bd_request_prompt: 
         one: BorrowDirect Availability
         other: BorrowDirect Availability
       bd_not_available:
