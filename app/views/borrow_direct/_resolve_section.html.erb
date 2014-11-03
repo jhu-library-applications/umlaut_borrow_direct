@@ -1,0 +1,14 @@
+<% if request_form = responses.find {|r| r.service_type_value_name == "bd_request_prompt"} %>
+    <%= render "borrow_direct/request_form", :response => request_form %>
+<% elsif link_to_search = responses.find {|r| r.service_type_value_name == "bd_link_to_search"  } %>
+    <%# display it the normal way with a standard response type %>
+    <ul>
+        <%= render renderer.item_render_hash(link_to_search) %>
+    </ul>
+
+<%  elsif not_avail = responses.find {|r| r.service_type_value_name == "bd_not_available" } %>
+    <%# display custom because we have no URL, and the standard thing insists on a link %>
+    <p><%= not_avail["display_text"] %></p>
+
+<% end %>
+

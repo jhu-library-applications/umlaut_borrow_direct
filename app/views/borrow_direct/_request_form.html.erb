@@ -1,0 +1,12 @@
+<form role="form" onsubmit="alert('Sorry, placing requests is not yet supported in this demo.'); return false;">
+    <p><%= response.view_data["display_text"] %></p>
+    <div class="row">
+        <div class="col-sm-7 borrow-direct-pickup-col">
+            <%= select_tag "borrowDirectPickupLocation", options_for_select(response.view_data["pickup_locations"]),
+                         :class => "form-control" %>
+        </div>
+        <div class="col-sm-5 borrow-direct-action-btn-col">
+            <input type="submit" class="borrow-direct-action btn btn-primary" value="Request">
+        </div>
+    </div>
+</form>

@@ -13,4 +13,16 @@ en:
       bd_request_placed:
         one: BorrowDirect Availability
         other: BorrowDirect Availability
+    services:
+      borrow_direct_adaptor:
+        bd_link_to_search:
+          display_text: Check BorrowDirect for item
+          notes: "Item may be available in BorrowDirect, try a search."
+        bd_request_prompt:
+          display_text: "Choose your delivery location:"
+    display_sections:
+      borrow_direct:
+        title: "BorrowDirect"
+        prompt: "Get item from one of our partner libraries in 4-6 days. Checkout period is 12 weeks, with no renewals."
+
 

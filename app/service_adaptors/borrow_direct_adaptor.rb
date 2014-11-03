@@ -28,7 +28,8 @@ class BorrowDirectAdaptor < Service
           # Mark it requestable!
           request.add_service_response( 
             :service=>self, 
-            :display_text => "TBD REQUEST PROMPT", 
+            :display_text => "Choose your delivery location",
+            :display_text_i18n => "bd_request_prompt.display_text",
             :service_type_value => :bd_request_prompt,
             :pickup_locations => response.pickup_locations)
         else
