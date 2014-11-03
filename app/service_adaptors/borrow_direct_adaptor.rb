@@ -3,7 +3,7 @@ require 'borrow_direct'
 class BorrowDirectAdaptor < Service
   include MetadataHelper
 
-  required_config_params :library_symbol, :find_item_patron_barcode
+  required_config_params :library_symbol, :find_item_patron_barcode, :html_query_base_url
 
   def service_types_generated
     return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placed]]
@@ -65,7 +65,7 @@ class BorrowDirectAdaptor < Service
   end
 
   def make_link_to_search_response(request)
-    url = BorrowDirect::GenerateQuery.new.best_known_item_query_url_with(
+    url = BorrowDirect::GenerateQuery.new(@html_query_base_url).best_known_item_query_url_with(
       :isbn   => request.referent.isbn,
       :title  => get_search_title(request.referent),
       :author => get_search_creator(request.referent)
@@ -73,7 +73,10 @@ class BorrowDirectAdaptor < Service
 
     request.add_service_response( 
       :service=>self, 
-      :display_text => "TBD LINK TO SEARCH", 
+      :display_text => "Check BorrowDirect for availability",
+      :display_text_i18n => "bd_link_to_search.display_text",
+      :notes => "May be available in BorrowDirect",
+      :notes_i18n => "bd_link_to_search.notes",
       :url => url, 
       :service_type_value => :bd_link_to_search)
   end

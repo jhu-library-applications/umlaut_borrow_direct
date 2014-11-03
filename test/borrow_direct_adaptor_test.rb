@@ -12,11 +12,13 @@ require 'test_helper'
 describe "BorrowDirectAdaptor" do
 
   before do
+    @test_html_query_base_url = "http://example.com/redirect"
     @service_config = {
       "type" => "BorrowDirectAdaptor",
       "priority" => 1,
       "library_symbol" => VCRFilter[:bd_library_symbol],
-      "find_item_patron_barcode" => VCRFilter[:bd_patron]
+      "find_item_patron_barcode" => VCRFilter[:bd_patron],
+      "html_query_base_url"      => @test_html_query_base_url
     }
     @service_config_list = {'default' => {
       "services" => {
@@ -53,6 +55,7 @@ describe "BorrowDirectAdaptor" do
       response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_link_to_search)
 
       assert response.view_data["url"].present?
+      assert response.view_data["url"].start_with? @test_html_query_base_url
     end
   end
 
