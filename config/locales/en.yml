@@ -19,7 +19,10 @@ en:
           display_text: Check BorrowDirect for item
           notes: "Item may be available in BorrowDirect, try a search."
         bd_request_prompt:
-          display_text: "Choose your delivery location:"
+          pickup_prompt: "Please select a delivery location"
+          request: Request
+        bd_not_available:
+          display_text: "This item is not currently available from BorrowDirect"
     display_sections:
       borrow_direct:
         title: "BorrowDirect"

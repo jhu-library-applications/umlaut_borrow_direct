@@ -8,7 +8,7 @@
 
 <%  elsif not_avail = responses.find {|r| r.service_type_value_name == "bd_not_available" } %>
     <%# display custom because we have no URL, and the standard thing insists on a link %>
-    <p><%= not_avail["display_text"] %></p>
+    <p class="umlaut-unavailable"><%= not_avail.view_data["display_text"] %></p>
 
 <% end %>
 

@@ -35,7 +35,8 @@ class BorrowDirectAdaptor < Service
         else
           request.add_service_response( 
             :service=>self, 
-            :display_text => "TBD NOT AVAILABLE", 
+            :display_text => "This item is not currently available from BorrowDirect",
+            :display_text_i18n => "bd_not_available.display_text", 
             :service_type_value => :bd_not_available)
         end
       rescue BorrowDirect::Error => e 
