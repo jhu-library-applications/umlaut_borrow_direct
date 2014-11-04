@@ -1,6 +1,0 @@
-# Some custom additional service type values we add to Umlaut
-
-bd_link_to_search: {}
-bd_request_prompt: {}
-bd_not_available: {}
-bd_request_placed: {}
