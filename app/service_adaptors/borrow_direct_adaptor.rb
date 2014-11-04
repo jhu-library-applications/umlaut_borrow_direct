@@ -5,6 +5,11 @@ class BorrowDirectAdaptor < Service
 
   required_config_params :library_symbol, :find_item_patron_barcode, :html_query_base_url
 
+  def initialize(config)
+    @display_name = "BorrowDirect"
+    super
+  end
+
   def service_types_generated
     return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placed]]
   end
