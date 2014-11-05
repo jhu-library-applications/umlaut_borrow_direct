@@ -61,6 +61,26 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       end
     end
 
+    test_with_cassette("error message displayed for dispatch error", :integration) do
+      service = BorrowDirectAdaptor.new(
+        "type" => "BorrowDirectAdaptor",
+        "priority" => 1,
+        "library_symbol" => "foo",
+        "find_item_patron_barcode" => "bar",
+        "html_query_base_url"      => "baz",
+        "service_id" => "BorrowDirect"
+      )    
+      request = fake_umlaut_request("/resolve?genre=book&title=foo")
+      request.dispatched(service, DispatchedService::FailedFatal)
+
+      get "/resolve?umlaut.request_id=#{request.id}"
+
+      assert_borrow_direct_section do |element|
+        assert_select ".borrow-direct-error"
+      end
+
+    end
+
 
 
   def assert_no_service_errors
@@ -73,11 +93,11 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   def assert_borrow_direct_section
-    section = assert_select ".umlaut-section.borrow_direct", :count => 1 do
+    section = assert_select ".umlaut-section.borrow_direct", :count => 1 do |element|
       assert_select ".section_heading h3", :text => I18n.t("umlaut.display_sections.borrow_direct.title")
       assert_select ".section_heading .section_prompt", :text => I18n.t("umlaut.display_sections.borrow_direct.prompt")
 
-      yield if block_given?
+      yield(element) if block_given?
     end
 
     return section

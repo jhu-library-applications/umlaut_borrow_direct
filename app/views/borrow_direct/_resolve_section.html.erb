@@ -12,3 +12,16 @@
 
 <% end %>
 
+<%# do we have an error in the DispatchedService? If so,
+    display a warning at bottom of the section no matter what %>
+
+<% 
+errors = umlaut_request.
+    dispatch_objects_with(:service_type_values => UmlautBorrowDirect.service_type_values).
+    find_all {|ds| ds.failed? }
+if errors.present? %>
+    <div class="borrow-direct-error alert alert-danger" role="alert">
+        <p><strong>Warning</strong>, there was a software error in determining
+            BorrowDirect availability.</p>
+    </div>
+<% end %>
