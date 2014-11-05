@@ -104,6 +104,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         assert_borrow_direct_section do |el|          
           # the error message
           assert_select ".borrow-direct-error"
+          assert_select ".borrow-direct-error-info"
           # the link
           assert_select "a.response_link[href]", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.display_text")
           assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")

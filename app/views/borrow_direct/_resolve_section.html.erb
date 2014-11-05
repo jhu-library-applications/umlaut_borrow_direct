@@ -19,9 +19,18 @@
 errors = umlaut_request.
     dispatch_objects_with(:service_type_values => UmlautBorrowDirect.service_type_values).
     find_all {|ds| ds.failed? }
-if errors.present? %>
+if errors.present? 
+    %>
     <div class="borrow-direct-error alert alert-danger" role="alert">
         <p><strong>Warning</strong>, there was a software error in determining
             BorrowDirect availability.</p>
+
+        <%  if timeout = errors.find do |ds| 
+                ds.exception_info.try {|h| h[:class_name] == "BorrowDirect::HttpTimeoutError"}
+            end %>
+            <p class="borrow-direct-error-info">
+                <%= timeout.exception_info[:message] %>
+            </p>
+        <% end %>
     </div>
 <% end %>
