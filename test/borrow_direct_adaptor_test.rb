@@ -111,7 +111,7 @@ describe "BorrowDirectAdaptor" do
 
         @service.handle(request)
 
-        assert_dispatched request, "test_bd"
+        assert_dispatched request, "test_bd", DispatchedService::FailedTemporary
         response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_link_to_search)
 
         assert response.view_data["url"].present?

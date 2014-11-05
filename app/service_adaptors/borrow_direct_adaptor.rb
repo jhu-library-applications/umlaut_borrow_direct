@@ -1,5 +1,9 @@
 require 'borrow_direct'
 
+# optional parameter http_timeout, in seconds, for HTTP with BD. BD can be _slow_. 
+# default to 20 seconds. Much longer, you might start running into Umlaut's
+# own global request processing timeouts. If timeout is reached, service
+# should produce a URL linking into a DIY BD search, AND display an error. 
 class BorrowDirectAdaptor < Service
   include MetadataHelper
 
@@ -7,6 +11,7 @@ class BorrowDirectAdaptor < Service
 
   def initialize(config)
     @display_name = "BorrowDirect"
+    @http_timeout = 20
     super
   end
 
@@ -28,7 +33,9 @@ class BorrowDirectAdaptor < Service
     if can_precheck_borrow_direct?(request)
       # pre-check it with BD api, this will take a while
       begin
-        response = BorrowDirect::FindItem.new(@find_item_patron_barcode, @library_symbol).find(:isbn => request.referent.isbn)
+        finditem = BorrowDirect::FindItem.new(@find_item_patron_barcode, @library_symbol)
+        finditem.timeout = @http_timeout
+        response = finditem.find(:isbn => request.referent.isbn)
         if response.requestable?
           # Mark it requestable!
           request.add_service_response( 
@@ -48,14 +55,16 @@ class BorrowDirectAdaptor < Service
         # BD didn't let us check availability, log it and give them
         # a consolation direct link response
         Rails.logger.error("BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n   #{e.inspect}\n   #{request.inspect}")
-
         make_link_to_search_response(request)
+        # And mark it as an error so error message will be displayed. Let's
+        # mark it a temporary error, so it'll be tried again later, it might
+        # be a temporary problem on BD, esp timeout.         
+        return request.dispatched(self, DispatchedService::FailedTemporary, e)
       end
     else
       # If we can't pre-check, we return a link to search!
       make_link_to_search_response(request)
     end
-
 
     return request.dispatched(self, true)
   end

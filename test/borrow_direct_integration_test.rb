@@ -81,6 +81,36 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
 
     end
 
+    test_with_cassette("BD timeout displays error with search link") do
+      @test_html_query_base_url = "http://example.com/redirect"
+      @service_config = {
+        "type" => "BorrowDirectAdaptor",
+        "priority" => 1,
+        "library_symbol" => VCRFilter[:bd_library_symbol],
+        "find_item_patron_barcode" => VCRFilter[:bd_patron],
+        "html_query_base_url"      => @test_html_query_base_url,
+        # small timeout to force error
+        "http_timeout"             => 0.0001
+      }
+      @service_config_list = {'default' => {
+        "services" => {
+            "test_bd" => @service_config
+          }
+        }
+      }
+
+      with_service_config(@service_config_list) do
+        get "/resolve?isbn=#{@@requestable_isbn}"
+        assert_borrow_direct_section do |el|          
+          # the error message
+          assert_select ".borrow-direct-error"
+          # the link
+          assert_select "a.response_link[href]", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.display_text")
+          assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
+        end
+      end
+    end
+
 
 
   def assert_no_service_errors
