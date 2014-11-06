@@ -10,14 +10,22 @@ module UmlautBorrowDirect
     # Another way to say this, the section will NOT be visible when
     # the service has finished, without generating responses, or errors. 
     #
+    # Oh, and don't show it at all unless citation does not pass
+    # MetadataHelper.title_is_serial?. If we don't think it's a serial,
+    # it's not appropriate for BD and no results will be shown, don't show
+    # spinner either. 
+    #
     # We took the Umlaut SectionRenderer visibility logic for :in_progress,
     # and added a condition for error state
     visibility_logic = lambda do |section_renderer|
-      (! section_renderer.responses_empty?) || 
-      section_renderer.services_in_progress? ||
-      section_renderer.request.dispatch_objects_with(
-        :service_type_values => UmlautBorrowDirect.service_type_values
-      ).find_all {|ds| ds.failed? }.present?
+      (! MetadataHelper.title_is_serial?(section_renderer.request.referent)) &&
+      (
+        (! section_renderer.responses_empty?) || 
+        section_renderer.services_in_progress? ||
+        section_renderer.request.dispatch_objects_with(
+          :service_type_values => UmlautBorrowDirect.service_type_values
+        ).find_all {|ds| ds.failed? }.present?
+      )
     end
 
     {
