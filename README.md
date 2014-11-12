@@ -2,6 +2,8 @@
 
 IN PROGRESS
 
+[![Build Status](https://travis-ci.org/jrochkind/umlaut_borrow_direct.svg)](https://travis-ci.org/jrochkind/umlaut_borrow_direct)
+
 ## Installation
 
 You have an Umlaut app already (Umlaut 4.1+ required)
