@@ -14,6 +14,10 @@ class BorrowDirectController < ApplicationController
   end
 
   protected
+
+  # Loads things from ID's giving in params, AND makes sure
+  # all pre-reqs are made for actually submitting the request, and
+  # returns and records an error if not. 
   def load_service_and_response
     @service_id = params[:service_id]
 
@@ -35,7 +39,26 @@ class BorrowDirectController < ApplicationController
 
     if params[:pickup_location].blank?
       render :status => 400, :text => "Missing required pickup_location"
+      return
     end
+
+    # Okay, we insist on there being an existing bd_request_prompt ServiceResponse,
+    # and on the pickup location matching one of it's pickup locations. BD
+    # itself does no validation of pickup_location (unclear what happens when you send
+    # a bad pickup location), so we've got to be as careful as we can be. 
+    request_prompt = @request.service_responses.to_a.find do |sr|
+      sr.service_id == @service_id &&
+      sr.service_type_value_name == "bd_request_prompt"
+    end
+    if request_prompt.nil?
+      render :status => 400, :text => "No existing bd_request_prompt response found for request #{@request.id}"
+      return
+    end
+    unless request_prompt.view_data["pickup_locations"].include? params[:pickup_location]
+      render :status => 400, :text => "Pickup location `#{params[:pickup_location]}` not listed as acceptable in bd_request_prompt ServiceResponse #{request_prompt.id}"
+      return
+    end
+
   end
 
 end

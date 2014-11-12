@@ -2,22 +2,42 @@ require 'test_helper'
 
 class BorrowDirectControllerTest < ActionController::TestCase
   test "500 on missing or bad parameters" do
-     post :submit_request, :service_id => "no_such_service", :request_id => "1212"
-     assert_failed_response "No such service for id `no_such_service`"
+    post :submit_request, :service_id => "no_such_service", :request_id => "1212"
+    assert_failed_response "No such service for id `no_such_service`"
 
-     post :submit_request, :service_id => "BorrowDirect", :request_id => "bad_id"
-     assert_failed_response "No Request with id `bad_id`"
+    post :submit_request, :service_id => "BorrowDirect", :request_id => "bad_id"
+    assert_failed_response "No Request with id `bad_id`"
 
-     # Missing pickup location
-     request = submittable_request
-     post :submit_request, :service_id => "BorrowDirect", :request_id => request.id
-     assert_failed_response "Missing required pickup_location"
+    # Missing pickup location
+    request = submittable_request
+    post :submit_request, :service_id => "BorrowDirect", :request_id => request.id
+    assert_failed_response "Missing required pickup_location"
+
+    # Have pickup location, but no borrow_direct_request_prompt response found
+    post :submit_request, :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "foo"
+    assert_failed_response "No existing bd_request_prompt response found for request #{request.id}"
+
+    # borrow_direct_request_prompt response found, but pickup location
+    # is not listed in it. 
+    request = submittable_request
+    request.add_service_response(
+      :service_type_value => :bd_request_prompt,
+      :service => ServiceStore.instantiate_service!("BorrowDirect", nil),
+      :pickup_locations => %w{one two three}
+    )
+    post :submit_request, :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "foo"
+    assert_failed_response "Pickup location `foo` not listed as acceptable in bd_request_prompt ServiceResponse"
   end
 
   test "good request assigns ivars" do
     request = submittable_request
+    request.add_service_response(
+      :service_type_value => :bd_request_prompt,
+      :service => ServiceStore.instantiate_service!("BorrowDirect", nil),
+      :pickup_locations => %w{one two three}
+    )
 
-    post :submit_request, :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "foo"
+    post :submit_request, :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "one"
     assert_response 200
 
     assert_assigns :request, :service, :service_id
@@ -26,7 +46,7 @@ class BorrowDirectControllerTest < ActionController::TestCase
 
   def assert_failed_response(message)
      assert_response 400
-     assert_includes message, @response.body
+     assert_includes @response.body, message
    end
 
 
