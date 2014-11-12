@@ -48,3 +48,23 @@ You can customize all text with a local locale file in your application, you nee
 override keys you want to override. 
 
 ## Technical Details
+
+### Custom ServiceTypeValue keys
+
+bd_link_to_search: A link to search results in BD standard interface
+* Standard service response with :display_text, :notes, and :url
+
+bd_request_prompt:  a little form with a 'request' button, shows up
+after confirmed requestability
+* display_text
+* pickup_locations => array of string pickup locations returned by BD
+
+bd_not_available: indicates a 'not available' message should be shown (may not be used by default?)
+* display_text
+
+bd_request_placement: A request is or has been placed
+* status: BorrowDirectController::InProgress, BorrowDirectController::Successful, BorrowDirectController::Error
+* request_number: BD request confirmation number, for succesful request
+* error: a hash keyed by :exception_class, :user_message (can be shown publicly to user)
+
+

@@ -1,6 +1,10 @@
 class BorrowDirectController < UmlautController
   before_filter :load_service_and_response
 
+  # Status codes used in ServiceResponses of type bd_request_placement
+  Succesful   = "successful"
+  InProgress  = "in_progress"
+  Error       = "error"
 
   # Will POST here as /borrow_direct/:service_id/:request_id
   #
@@ -10,6 +14,14 @@ class BorrowDirectController < UmlautController
     # mainly so standard Umlaut will catch if it times out with no
     # request confirmation update, and mark it as errored appropriately. 
     @request.dispatched(@service, DispatchedService::InProgress)
+
+    # add a bd_request_placement object as a place to mark that we are in progress
+    # specifically with placing a request
+    @request.add_service_response(
+      :service            => @service,
+      :service_type_value => :bd_request_placement,
+      :status             => InProgress
+    )
 
     # redirect back to /resolve menu, for same object, add explicit request_id
     # in too. 

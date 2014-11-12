@@ -10,7 +10,7 @@ en:
       bd_not_available:
         one: BorrowDirect Availability
         other: BorrowDirect Availability
-      bd_request_placed:
+      bd_request_placement:
         one: BorrowDirect Availability
         other: BorrowDirect Availability
     services:

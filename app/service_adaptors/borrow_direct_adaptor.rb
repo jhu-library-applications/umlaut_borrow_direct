@@ -16,7 +16,7 @@ class BorrowDirectAdaptor < Service
   end
 
   def service_types_generated
-    return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placed]]
+    return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placement]]
   end
 
   def appropriate_citation_type?(request)

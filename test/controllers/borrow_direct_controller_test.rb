@@ -29,7 +29,7 @@ class BorrowDirectControllerTest < ActionController::TestCase
     assert_failed_response "Pickup location `foo` not listed as acceptable in bd_request_prompt ServiceResponse"
   end
 
-  test "good request assigns ivars" do
+  test "good request" do
     request = submittable_request
     request.add_service_response(
       :service_type_value => :bd_request_prompt,
@@ -42,6 +42,11 @@ class BorrowDirectControllerTest < ActionController::TestCase
     assert_response 303 # redirect
 
     assert_dispatched request, "BorrowDirect", DispatchedService::InProgress
+
+    responses = assert_service_responses request, "BorrowDirect", :includes_type => [:bd_request_placement]
+
+    req_placement = responses.find {|r| r.service_type_value_name == "bd_request_placement"}
+    assert_equal BorrowDirectController::InProgress, req_placement.view_data[:status]
   end
 
 
