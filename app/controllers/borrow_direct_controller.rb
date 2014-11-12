@@ -42,18 +42,18 @@ class BorrowDirectController < UmlautController
     end
 
     if @service.nil?
-      render :status => 400, :text => "No such service for id `#{params[:service_id]}`"
+      handle_error "No such service for id `#{params[:service_id]}`"
       return
     end
 
     @request = Request.where(:id => params[:request_id]).first
     if @request.nil?
-      render :status => 400, :text => "No Request with id `#{params[:request_id]}`"
+      handle_error "No Request with id `#{params[:request_id]}`"
       return
     end
 
     if params[:pickup_location].blank?
-      render :status => 400, :text => "Missing required pickup_location"
+      handle_error "Missing required pickup_location"
       return
     end
 
@@ -66,14 +66,17 @@ class BorrowDirectController < UmlautController
       sr.service_type_value_name == "bd_request_prompt"
     end
     if request_prompt.nil?
-      render :status => 400, :text => "No existing bd_request_prompt response found for request #{@request.id}"
+      handle_error "No existing bd_request_prompt response found for request #{@request.id}"
       return
     end
     unless request_prompt.view_data["pickup_locations"].include? params[:pickup_location]
-      render :status => 400, :text => "Pickup location `#{params[:pickup_location]}` not listed as acceptable in bd_request_prompt ServiceResponse #{request_prompt.id}"
+      handle_error "Pickup location `#{params[:pickup_location]}` not listed as acceptable in bd_request_prompt ServiceResponse #{request_prompt.id}"
       return
     end
+  end
 
+  def handle_error(msg)
+    render :status => 400, :text => msg
   end
 
 end
