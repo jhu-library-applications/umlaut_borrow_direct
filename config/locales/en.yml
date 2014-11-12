@@ -23,6 +23,8 @@ en:
           request: Request
         bd_not_available:
           display_text: "This item is not currently available from BorrowDirect"
+        bd_request_placement:
+          placement_progress: "Placing BorrowDirect Request"
     display_sections:
       borrow_direct:
         title: "BorrowDirect"

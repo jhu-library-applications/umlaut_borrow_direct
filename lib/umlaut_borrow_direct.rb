@@ -33,7 +33,8 @@ module UmlautBorrowDirect
       :html_area  => :main,
       :partial    => "borrow_direct/resolve_section",
       :visibility => visibility_logic,
-      :service_type_values => self.service_type_values
+      :service_type_values => self.service_type_values,
+      :show_spinner => false # we do our own
     }
   end
 
