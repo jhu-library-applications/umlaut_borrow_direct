@@ -19,8 +19,12 @@ class BorrowDirectAdaptor < Service
     return [ServiceTypeValue[:bd_link_to_search], ServiceTypeValue[:bd_request_prompt], ServiceTypeValue[:bd_not_available], ServiceTypeValue[:bd_request_placed]]
   end
 
+  def appropriate_citation_type?(request)
+    return ! title_is_serial?(request.referent)
+  end
+
   def handle(request)
-    if title_is_serial?(request.referent)
+    if ! appropriate_citation_type?(request)
       # we do nothing if it looks like an article or journal title. 
       return request.dispatched(self, true)
     end
