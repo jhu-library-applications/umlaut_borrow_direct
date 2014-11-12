@@ -33,7 +33,7 @@ module UmlautBorrowDirect
       :html_area  => :main,
       :partial    => "borrow_direct/resolve_section",
       :visibility => visibility_logic,
-      :service_type_values => %w{bd_link_to_search bd_request_prompt bd_not_available bd_request_placed}
+      :service_type_values => self.service_type_values
     }
   end
 
