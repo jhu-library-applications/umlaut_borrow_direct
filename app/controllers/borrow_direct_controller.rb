@@ -1,4 +1,4 @@
-class BorrowDirectController < ApplicationController
+class BorrowDirectController < UmlautController
   before_filter :load_service_and_response
 
 
@@ -6,11 +6,14 @@ class BorrowDirectController < ApplicationController
   #
   # Will return a 500 if service_id or service_response_id can't be found
   def submit_request    
-    # mark the DispatchedService as InProgress again, to trigger the spinner
-    #@service_response.request.dispatched(@service, DispatchedService::InProgress)
+    # mark the DispatchedService as InProgress again -- we do this
+    # mainly so standard Umlaut will catch if it times out with no
+    # request confirmation update, and mark it as errored appropriately. 
+    @request.dispatched(@service, DispatchedService::InProgress)
 
-    # temporary
-    render :text => "OK"
+    # redirect back to /resolve menu, for same object, add explicit request_id
+    # in too. 
+    redirect_to url_for_with_co({:controller => "resolve", "umlaut.request_id" => @request.id}, @request.to_context_object), :status => 303
   end
 
   protected

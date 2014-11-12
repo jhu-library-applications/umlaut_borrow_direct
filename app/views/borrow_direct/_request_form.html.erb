@@ -1,11 +1,11 @@
 <%= form_tag( 
     borrow_direct_submit_path(:request_id => response.request.id, :service_id => response.service_id),
-    :method => :post, :role => "form", :class => "borrow-direct-request-form", :onsubmit => "alert('Sorry, placing requests is not yet supported in this demo.'); return false;") do %>
+    :method => :post, :role => "form", :class => "borrow-direct-request-form") do %>
 
 
     <div class="row">
         <div class="col-sm-7 borrow-direct-pickup-col">
-            <%= select_tag "borrowDirectPickupLocation", options_for_select(response.view_data["pickup_locations"]),
+            <%= select_tag "pickup_location", options_for_select(response.view_data["pickup_locations"]),
                          :prompt => I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_prompt.pickup_prompt", :default => "Please choose a delivery location"),
                          :class => "form-control" %>
         </div>

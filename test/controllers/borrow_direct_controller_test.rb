@@ -38,9 +38,10 @@ class BorrowDirectControllerTest < ActionController::TestCase
     )
 
     post :submit_request, :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "one"
-    assert_response 200
-
     assert_assigns :request, :service, :service_id
+    assert_response 303 # redirect
+
+    assert_dispatched request, "BorrowDirect", DispatchedService::InProgress
   end
 
 

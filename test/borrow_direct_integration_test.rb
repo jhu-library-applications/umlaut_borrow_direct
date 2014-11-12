@@ -48,7 +48,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
           assert_equal   "post", form_element["method"]          
           assert form_element["action"].present?
 
-          assert_select "select[name=borrowDirectPickupLocation]" do 
+          assert_select "select[name=pickup_location]" do 
             assert_select "option:first-child", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_request_prompt.pickup_prompt")
           end
           assert_select "input[type=submit][value=?]", I18n.translate("umlaut.services.borrow_direct_adaptor.bd_request_prompt.request")
