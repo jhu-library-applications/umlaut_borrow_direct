@@ -76,6 +76,7 @@ class BorrowDirectController < UmlautController
   end
 
   def handle_error(msg)
+    Rails.logger.error("BorrowDirectController: #{msg}")
     render :status => 400, :text => msg
   end
 
