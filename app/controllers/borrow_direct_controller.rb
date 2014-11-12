@@ -7,7 +7,10 @@ class BorrowDirectController < ApplicationController
   # Will return a 500 if service_id or service_response_id can't be found
   def submit_request    
     # mark the DispatchedService as InProgress again, to trigger the spinner
-    @service_response.request.dispatched(@service, DispatchedService::InProgress)
+    #@service_response.request.dispatched(@service, DispatchedService::InProgress)
+
+    # temporary
+    render :text => "OK"
   end
 
   protected
@@ -25,7 +28,7 @@ class BorrowDirectController < ApplicationController
     end
 
     @request = Request.where(:id => params[:request_id]).first
-    if @service_response.nil?
+    if @request.nil?
       render :status => 400, :text => "No ServiceResponse with id `params[:service_response_id]`"
       return
     end
