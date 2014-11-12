@@ -29,8 +29,12 @@ class BorrowDirectController < ApplicationController
 
     @request = Request.where(:id => params[:request_id]).first
     if @request.nil?
-      render :status => 400, :text => "No ServiceResponse with id `params[:service_response_id]`"
+      render :status => 400, :text => "No Request with id `#{params[:request_id]}`"
       return
+    end
+
+    if params[:pickup_location].blank?
+      render :status => 400, :text => "Missing required pickup_location"
     end
   end
 
