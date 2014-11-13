@@ -17,10 +17,8 @@ class BorrowDirectController < UmlautController
 
     # add a bd_request_status object as a place to mark that we are in progress
     # specifically with placing a request
-    @request.add_service_response(
-      :service            => @service,
-      :service_type_value => :bd_request_status,
-      :status             => InProgress
+    set_status_response(
+      :status => InProgress
     )
 
     # redirect back to /resolve menu, for same object, add explicit request_id
@@ -78,6 +76,22 @@ class BorrowDirectController < UmlautController
   def handle_error(msg)
     Rails.logger.error("BorrowDirectController: #{msg}")
     render :status => 400, :text => msg
+  end
+
+  def set_status_response(properties)
+    
+    # do we already have one, or should we create a new one?
+    if bd_status = @request.get_service_type(:bd_request_status).first
+      bd_status.take_key_values(properties)
+      bd_status.save!
+    else
+      properties = properties.merge(
+        :service            => @service,
+        :service_type_value => :bd_request_status
+      )  
+      @request.add_service_response(properties)
+    end
+
   end
 
 end
