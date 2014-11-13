@@ -2,9 +2,10 @@ class BorrowDirectController < UmlautController
   before_filter :load_service_and_response
 
   # Status codes used in ServiceResponses of type bd_request_status
-  Succesful   = "successful"
-  InProgress  = "in_progress"
-  Error       = "error"
+  Succesful       = "successful"
+  InProgress      = "in_progress"
+  ValidationError = "validation_error" # user input error
+  Error           = "error" # system error
 
   # Will POST here as /borrow_direct/:service_id/:request_id
   #
@@ -23,7 +24,7 @@ class BorrowDirectController < UmlautController
 
     # redirect back to /resolve menu, for same object, add explicit request_id
     # in too. 
-    redirect_to url_for_with_co({:controller => "resolve", "umlaut.request_id" => @request.id}, @request.to_context_object), :status => 303
+    redirect_to_resolve_menu
   end
 
   protected
@@ -40,18 +41,18 @@ class BorrowDirectController < UmlautController
     end
 
     if @service.nil?
-      handle_error "No such service for id `#{params[:service_id]}`"
+      register_error "No such service for id `#{params[:service_id]}`"
       return
     end
 
     @request = Request.where(:id => params[:request_id]).first
     if @request.nil?
-      handle_error "No Request with id `#{params[:request_id]}`"
+      register_error "No Request with id `#{params[:request_id]}`"
       return
     end
 
     if params[:pickup_location].blank?
-      handle_error "Missing required pickup_location"
+      register_error "Missing required pickup_location"
       return
     end
 
@@ -64,18 +65,34 @@ class BorrowDirectController < UmlautController
       sr.service_type_value_name == "bd_request_prompt"
     end
     if request_prompt.nil?
-      handle_error "No existing bd_request_prompt response found for request #{@request.id}"
+      register_error "No existing bd_request_prompt response found for request #{@request.id}"
       return
     end
     unless request_prompt.view_data["pickup_locations"].include? params[:pickup_location]
-      handle_error "Pickup location `#{params[:pickup_location]}` not listed as acceptable in bd_request_prompt ServiceResponse #{request_prompt.id}"
+      register_error "Pickup location `#{params[:pickup_location]}` not listed as acceptable in bd_request_prompt ServiceResponse #{request_prompt.id}"
       return
     end
   end
 
-  def handle_error(msg)
-    Rails.logger.error("BorrowDirectController: #{msg}")
-    render :status => 400, :text => msg
+  # error_type defaults to Error, but can also be ValidationError
+  def register_error(msg, error_type = Error)
+    if error_type == Error
+      Rails.logger.error("BorrowDirectController: #{msg}")
+    end
+
+    if @request && @service
+      set_status_response(
+        :status => error_type,
+        :error_user_message => msg
+      )
+    end
+
+    # Redirect back to menu page
+    if @request
+      redirect_to_resolve_menu
+    else
+      render :status => 400, :text => msg
+    end
   end
 
   def set_status_response(properties)
@@ -92,6 +109,10 @@ class BorrowDirectController < UmlautController
       @request.add_service_response(properties)
     end
 
+  end
+
+  def redirect_to_resolve_menu
+    redirect_to url_for_with_co({:controller => "resolve", "umlaut.request_id" => @request.id}, @request.to_context_object), :status => 303
   end
 
 end

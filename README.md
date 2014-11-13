@@ -62,9 +62,10 @@ after confirmed requestability
 bd_not_available: indicates a 'not available' message should be shown (may not be used by default?)
 * display_text
 
-bd_request_placement: A request is or has been placed
+bd_request_status: A request is or has been placed
 * status: BorrowDirectController::InProgress, BorrowDirectController::Successful, BorrowDirectController::Error
 * request_number: BD request confirmation number, for succesful request
-* error: a hash keyed by :exception_class, :user_message (can be shown publicly to user)
+* error_user_message: An error message that can be shown publicly to user
+
 
 
