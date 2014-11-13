@@ -1,26 +1,24 @@
-<% request_status = responses.find {|r| r.service_type_value_name == "bd_request_status"} %>
+<% bd_presenter = BorrowDirectPresenter.new(renderer) %>
 
-<% if (!request_status) && request_form = responses.find {|r| r.service_type_value_name == "bd_request_prompt"} %>
-    <%= render "borrow_direct/request_form", :response => request_form %>
-<% elsif link_to_search = responses.find {|r| r.service_type_value_name == "bd_link_to_search"  } %>
+<% if bd_presenter.show_request_form? %>
+    <%= render "borrow_direct/request_form", :response => bd_presenter.request_prompt_response %>
+<% end %>
+
+<% if bd_presenter.show_link_response?  %>
     <%# display it the normal way with a standard response type %>
     <ul>
-        <%= render renderer.item_render_hash(link_to_search) %>
+        <%= render renderer.item_render_hash(bd_presenter.link_response) %>
     </ul>
+<% end %>
 
-<%  elsif (!request_status) && not_avail = responses.find {|r| r.service_type_value_name == "bd_not_available" } %>
+<% if bd_presenter.show_not_available?  %>
     <%# display custom because we have no URL, and the standard thing insists on a link %>
-    <p class="umlaut-unavailable"><%= not_avail.view_data["display_text"] %></p>
+    <p class="umlaut-unavailable"><%= bd_presenter.not_available_response.view_data["display_text"] %></p>
 <% end %>
 
 <%# we do custom spinner, so we can customize label for 'placing request' %>
-<% if renderer.request.service_types_in_progress?(renderer.service_type_values)   %>
-    <% 
-       render_hash = renderer.spinner_render_hash
-       render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_status.progress") if request_status.try {|sr| sr.view_data[:status] == BorrowDirectController::InProgress}
-    %>
-
-    <%= render render_hash %>
+<% if bd_presenter.service_in_progress?   %>
+    <%= render bd_presenter.spinner_render_hash %>
 <% end %>
 
 <%# do we have an error in the DispatchedService? If so,
