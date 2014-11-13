@@ -21,6 +21,7 @@ en:
         bd_request_prompt:
           pickup_prompt: "Please select a pickup location"
           request: Request
+          pickup_validation: "You must choose a pickup location"
         bd_not_available:
           display_text: "This item is not currently available from BorrowDirect"
         bd_request_status:

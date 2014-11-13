@@ -1,6 +1,11 @@
 <% bd_presenter = BorrowDirectPresenter.new(renderer) %>
 
 <% if bd_presenter.show_request_form? %>
+    <% if str = bd_presenter.validation_error %>
+        <p class="validation-error text-danger">
+            <%= str %>
+        </p>
+    <% end %>
     <%= render "borrow_direct/request_form", :response => bd_presenter.request_prompt_response %>
 <% end %>
 

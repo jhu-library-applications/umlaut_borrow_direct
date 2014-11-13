@@ -86,7 +86,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
 
     end
 
-    test_with_cassette("BD timeout displays error with search link") do
+    test_with_cassette("BD timeout displays error with search link", :integration) do
       @test_html_query_base_url = "http://example.com/redirect"
       @service_config = {
         "type" => "BorrowDirectAdaptor",
@@ -115,6 +115,21 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
           assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
         end
       end
+    end
+
+    test_with_cassette "validation error without pickup location", :integration do
+      get "/resolve?isbn=#{@@requestable_isbn}"
+
+      # get the form to submit it
+      form = (css_select ".borrow-direct-request-form").first
+      
+      post form["action"]
+      follow_redirect!
+
+      assert_borrow_direct_section do 
+        assert_select ".validation-error.text-danger"
+      end
+
     end
 
 

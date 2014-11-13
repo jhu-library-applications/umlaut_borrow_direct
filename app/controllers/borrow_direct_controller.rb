@@ -52,7 +52,7 @@ class BorrowDirectController < UmlautController
     end
 
     if params[:pickup_location].blank?
-      register_error "Missing required pickup_location"
+      register_error I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_prompt.pickup_validation"), ValidationError
       return
     end
 

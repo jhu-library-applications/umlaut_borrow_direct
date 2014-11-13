@@ -13,7 +13,7 @@ class BorrowDirectControllerTest < ActionController::TestCase
     # Missing pickup location
     request = submittable_request
     post :submit_request, :service_id => "BorrowDirect", :request_id => request.id
-    assert_failed_response "Missing required pickup_location"
+    assert_failed_response I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_prompt.pickup_validation")
   end
 
   test "error on bad pickup location" do

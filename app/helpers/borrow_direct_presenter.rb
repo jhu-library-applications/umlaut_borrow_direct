@@ -60,7 +60,11 @@ class BorrowDirectPresenter
   end
 
   def show_request_form?
-    (! self.status_response) && self.request_prompt_response
+    # have a request form, and do not have a status_response or have one with
+    # a validation error. 
+    self.request_prompt_response && ! (
+      self.status_response && self.status_response.view_data[:status] != BorrowDirectController::ValidationError
+    )
   end
 
   def show_not_available?
@@ -69,6 +73,13 @@ class BorrowDirectPresenter
 
   def show_link_response?
     (! self.show_request_form?) && (! self.show_not_available?) && self.link_response
+  end
+
+  # nil or a string
+  def validation_error
+    self.status_response && 
+    self.status_response.view_data[:status] == BorrowDirectController::ValidationError &&
+    self.status_response.view_data[:error_user_message]  
   end
 
 end
