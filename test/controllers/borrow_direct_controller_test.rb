@@ -43,10 +43,10 @@ class BorrowDirectControllerTest < ActionController::TestCase
 
     assert_dispatched request, "BorrowDirect", DispatchedService::InProgress
 
-    responses = assert_service_responses request, "BorrowDirect", :includes_type => [:bd_request_placement]
+    responses = assert_service_responses request, "BorrowDirect", :includes_type => [:bd_request_status]
 
-    req_placement = responses.find {|r| r.service_type_value_name == "bd_request_placement"}
-    assert_equal BorrowDirectController::InProgress, req_placement.view_data[:status]
+    req_status = responses.find {|r| r.service_type_value_name == "bd_request_status"}
+    assert_equal BorrowDirectController::InProgress, req_status.view_data[:status]
   end
 
 

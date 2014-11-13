@@ -1,6 +1,6 @@
-<% request_placement = responses.find {|r| r.service_type_value_name == "bd_request_placement"} %>
+<% request_status = responses.find {|r| r.service_type_value_name == "bd_request_status"} %>
 
-<% if (!request_placement) && request_form = responses.find {|r| r.service_type_value_name == "bd_request_prompt"} %>
+<% if (!request_status) && request_form = responses.find {|r| r.service_type_value_name == "bd_request_prompt"} %>
     <%= render "borrow_direct/request_form", :response => request_form %>
 <% elsif link_to_search = responses.find {|r| r.service_type_value_name == "bd_link_to_search"  } %>
     <%# display it the normal way with a standard response type %>
@@ -8,7 +8,7 @@
         <%= render renderer.item_render_hash(link_to_search) %>
     </ul>
 
-<%  elsif (!request_placement) && not_avail = responses.find {|r| r.service_type_value_name == "bd_not_available" } %>
+<%  elsif (!request_status) && not_avail = responses.find {|r| r.service_type_value_name == "bd_not_available" } %>
     <%# display custom because we have no URL, and the standard thing insists on a link %>
     <p class="umlaut-unavailable"><%= not_avail.view_data["display_text"] %></p>
 <% end %>
@@ -17,7 +17,7 @@
 <% if renderer.request.service_types_in_progress?(renderer.service_type_values)   %>
     <% 
        render_hash = renderer.spinner_render_hash
-       render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_placement.placement_progress") if request_placement.try {|sr| sr.view_data[:status] == BorrowDirectController::InProgress}
+       render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_status.progress") if request_status.try {|sr| sr.view_data[:status] == BorrowDirectController::InProgress}
     %>
 
     <%= render render_hash %>
@@ -25,7 +25,7 @@
 
 <%# do we have an error in the DispatchedService? If so,
     display a warning at bottom of the section no matter what.
-    Do we have a bd_request_placement with an error? Display it too. %>
+    Do we have a bd_request_status with an error? Display it too. %>
 
 <% 
 errors = umlaut_request.

@@ -40,7 +40,7 @@ module UmlautBorrowDirect
 
   # Array of strings of all service type value names UmlautBorrowDirect does. 
   def self.service_type_values
-    %w{bd_link_to_search bd_request_prompt bd_not_available bd_request_placement}
+    %w{bd_link_to_search bd_request_prompt bd_not_available bd_request_status}
   end
 
 end
