@@ -189,6 +189,10 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       end
     end
 
+    test "routing" do
+      assert_recognizes({ controller: 'borrow_direct', action: 'submit_request', :service_id => "service_id", :request_id => "1" }, { path: '/borrow_direct/service_id/1', method: :post })
+    end
+
 
 
   def assert_no_service_errors
