@@ -45,7 +45,13 @@ errors = umlaut_request.
 if errors.present? 
     %>
     <% if bd_presenter.could_not_place_request? %>
-        <p class="borrow-direct-error alert alert-danger" role="alert"><%= t('umlaut.services.borrow_direct_adaptor.bd_request_status.error') %></p>
+        <div class="borrow-direct-error alert alert-danger" role="alert">
+            <p><%= t('umlaut.services.borrow_direct_adaptor.bd_request_status.error') %></p>
+            <% if bd_presenter.user_reportable_error %>
+                <p><%= bd_presenter.user_reportable_error %></p>
+            <% end %>
+        </div>
+
     <% else %>
         <div class="borrow-direct-error alert alert-danger" role="alert">
             <p><strong>Warning</strong>, there was a software error in determining

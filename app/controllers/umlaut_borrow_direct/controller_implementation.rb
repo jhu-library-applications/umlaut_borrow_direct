@@ -50,7 +50,11 @@ module UmlautBorrowDirect
             Rails.logger.error("BorrowDirect: Error placing request:  #{e.class} #{e.message}. Backtrace:\n  #{Umlaut::Util.clean_backtrace(e).join("\n  ")}\n")
 
             request.dispatched(service, DispatchedService::FailedFatal, e)
-            set_status_response({:status => Error}, request)
+
+            status_response_data = {:status => Error}
+            status_response_data[:error_user_message] = e.message if e.kind_of? UserReportableError
+
+            set_status_response(status_response_data, request)
 
             # In testing, we kinda wanna re-raise this guy
             raise e if defined?(VCR::Errors::UnhandledHTTPRequestError) && e.kind_of?(VCR::Errors::UnhandledHTTPRequestError)
@@ -155,6 +159,11 @@ module UmlautBorrowDirect
     def patron_barcode
       raise StandardError.new("Developers must override patron_barcode locally to return authorized patron barcode.")
     end
+
+    # Raise one of these with a message that should be shown to the user,
+    # if you want an error message shown to the user. 
+    class UserReportableError < StandardError ; end
+
 
   end
 end

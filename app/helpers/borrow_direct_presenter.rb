@@ -93,4 +93,10 @@ class BorrowDirectPresenter
     self.status_response.view_data[:error_user_message]  
   end
 
+  def user_reportable_error
+    self.status_response &&
+    self.status_response.view_data[:status] == BorrowDirectController::Error &&
+    self.status_response.view_data[:error_user_message]
+  end
+
 end
