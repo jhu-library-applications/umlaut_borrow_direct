@@ -47,6 +47,7 @@ module UmlautBorrowDirect
 
         rescue StandardError => e          
           ActiveRecord::Base.connection_pool.with_connection do
+            Rails.logger.error("BorrowDirect: Error placing request:  #{e.class} #{e.message}. Backtrace:\n  #{Umlaut::Util.clean_backtrace(e).join("\n  ")}\n")
 
             request.dispatched(service, DispatchedService::FailedFatal, e)
             set_status_response({:status => Error}, request)
