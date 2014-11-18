@@ -7,7 +7,7 @@ module UmlautBorrowDirect
     before_filter :load_service_and_response
 
     # Status codes used in ServiceResponses of type bd_request_status
-    Succesful       = "successful"
+    Successful       = "successful"
     InProgress      = "in_progress"
     ValidationError = "validation_error" # user input error
     Error           = "error" # system error
@@ -33,10 +33,28 @@ module UmlautBorrowDirect
       # We're gonna kick off the actual request submission in a bg thread,
       # cause it's so damn slow. Yeah, if the process dies in the middle, we might
       # lose it. Umlaut will notice after a timeout and display error. 
-      Thread.new do 
-        request_number = BorrowDirect::RequestItem.new(patron_barcode).
-          make_request!(params[:pickup_location], :isbn => "1212121212")
+      # Saving the @bg_thread only so in testing we can wait on it. 
+      @bg_thread = Thread.new(@request, @service, @request.referent.isbn) do |request, service, isbn|
+        begin
 
+          request_number = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol).
+            make_request!(params[:pickup_location], :isbn => isbn)
+
+          ActiveRecord::Base.connection_pool.with_connection do
+            request.dispatched(service, DispatchedService::Successful)
+            set_status_response({:status => Successful, :request_number => request_number }, request)
+          end
+
+        rescue StandardError => e          
+          ActiveRecord::Base.connection_pool.with_connection do
+
+            request.dispatched(service, DispatchedService::FailedFatal, e)
+            set_status_response({:status => Error}, request)
+
+            # In testing, we kinda wanna re-raise this guy
+            raise e if defined?(VCR::Errors::UnhandledHTTPRequestError) && e.kind_of?(VCR::Errors::UnhandledHTTPRequestError)
+          end
+        end
       end
 
       # redirect back to /resolve menu, for same object, add explicit request_id
@@ -112,7 +130,7 @@ module UmlautBorrowDirect
       end
     end
 
-    def set_status_response(properties)
+    def set_status_response(properties, request = @request)
       
       # do we already have one, or should we create a new one?
       if bd_status = @request.get_service_type(:bd_request_status).first
@@ -130,6 +148,11 @@ module UmlautBorrowDirect
 
     def redirect_to_resolve_menu
       redirect_to url_for_with_co({:controller => "resolve", "umlaut.request_id" => @request.id}, @request.to_context_object), :status => 303
+    end
+
+    # Should be overridden locally
+    def patron_barcode
+      raise StandardError.new("Developers must override patron_barcode locally to return authorized patron barcode.")
     end
 
   end

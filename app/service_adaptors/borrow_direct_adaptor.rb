@@ -9,6 +9,8 @@ class BorrowDirectAdaptor < Service
 
   required_config_params :library_symbol, :find_item_patron_barcode, :html_query_base_url
 
+  attr_accessor :library_symbol
+
   def initialize(config)
     @display_name = "BorrowDirect"
     @http_timeout = 20

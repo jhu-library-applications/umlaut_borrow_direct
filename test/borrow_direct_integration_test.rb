@@ -8,14 +8,16 @@ require 'test_helper'
 # so we're using test::unit style with umlaut's test_with_cassette. 
 # https://github.com/metaskills/minitest-spec-rails/issues/54
 class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
+  # So-called "transactional fixtures" make all DB activity in a transaction,
+  # which messes up Umlaut's background threading. 
+  self.use_transactional_fixtures = false
+
   extend TestWithCassette
 
   @@requestable_isbn      = ENV['BD_REQUESTABLE_ISBN'] || '9789810743734'
   @@non_requestable_isbn  = ENV["BD_NON_REQUESTABLE_ISBN"] || '0109836413'
 
-  # So-called "transactional fixtures" make all DB activity in a transaction,
-  # which messes up Umlaut's background threading. 
-  self.use_transactional_fixtures = false
+
 
     test "displays nothing for non-book-like items" do
       get "/resolve?genre=article&title=foo&author=bar"
@@ -130,6 +132,61 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         assert_select ".validation-error.text-danger"
       end
 
+    end
+
+    test_with_cassette("places request succesfully", :integration) do
+      get "/resolve?isbn=#{@@requestable_isbn}"
+
+      # get the form to submit it
+      form = (css_select ".borrow-direct-request-form").first
+      pickup_location = (css_select form, "option")[1].children.first.to_s
+      
+      post form["action"], :pickup_location => pickup_location
+      
+      # Wait on the bg_thread to complete using hacky just for testing
+      # mechanism. This will make sure it's HTTP transaction is in the
+      # VCR cassette, and also return us so when we access the menu
+      # page again it should have a completed output. 
+      controller.instance_variable_get("@bg_thread").join
+
+      follow_redirect!
+
+      # spinner waiting, usually
+      assert_borrow_direct_section do 
+        assert_select ".borrow-direct-error", :count => 0
+        assert_select ".borrow-direct-confirmation"
+      end
+    end
+
+    test_with_cassette("error on bad patron barcode", :integration) do
+      begin
+        BorrowDirectController.force_patron_barcode = "bad_barcode"
+
+        get "/resolve?isbn=#{@@requestable_isbn}"
+
+        # get the form to submit it
+        form = (css_select ".borrow-direct-request-form").first
+        pickup_location = (css_select form, "option")[1].children.first.to_s
+        
+        post form["action"], :pickup_location => pickup_location
+        
+        # Wait on the bg_thread to complete using hacky just for testing
+        # mechanism. This will make sure it's HTTP transaction is in the
+        # VCR cassette, and also return us so when we access the menu
+        # page again it should have a completed output. 
+        controller.instance_variable_get("@bg_thread").join
+
+        follow_redirect!
+
+        # spinner waiting, usually
+        assert_borrow_direct_section do 
+          assert_select ".borrow-direct-error"
+          assert_select ".borrow-direct-confirmation", :count => 0
+        end
+
+      ensure
+        BorrowDirectController.force_patron_barcode = nil
+      end
     end
 
 

@@ -26,6 +26,8 @@ en:
           display_text: "This item is not currently available from BorrowDirect"
         bd_request_status:
           progress: "Placing BorrowDirect Request"
+          error:  "Sorry, due to an error your request could not be placed."
+          confirmation: "Your request has been submitted to BorrowDirect.  Request number:"
     display_sections:
       borrow_direct:
         title: "BorrowDirect"

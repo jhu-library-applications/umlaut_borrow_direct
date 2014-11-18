@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class BorrowDirectControllerTest < ActionController::TestCase
+  # So-called "transactional fixtures" make all DB activity in a transaction,
+  # which messes up Umlaut's background threading. 
+  self.use_transactional_fixtures = false
+
+  
+  extend TestWithCassette
+
   test "400 on missing or bad parameters" do
     post :submit_request, :service_id => "no_such_service", :request_id => "1212"
     assert_failed_response "No such service for id `no_such_service`", 400
@@ -34,7 +41,7 @@ class BorrowDirectControllerTest < ActionController::TestCase
     assert_failed_response "Pickup location `foo` not listed as acceptable in bd_request_prompt ServiceResponse"
   end
 
-  test "good request" do
+  test_with_cassette("good request", :controller) do
     request = submittable_request
     request.add_service_response(
       :service_type_value => :bd_request_prompt,
@@ -52,6 +59,12 @@ class BorrowDirectControllerTest < ActionController::TestCase
 
     req_status = responses.find {|r| r.service_type_value_name == "bd_request_status"}
     assert_equal BorrowDirectController::InProgress, req_status.view_data[:status]
+
+    # Wait on the bg_thread to complete using hacky just for testing
+    # mechanism. This will make sure it's HTTP transaction is in the
+    # VCR cassette, and also return us so when we access the menu
+    # page again it should have a completed output. 
+    @controller.instance_variable_get("@bg_thread").join
   end
 
 

@@ -59,11 +59,14 @@ class BorrowDirectPresenter
     return render_hash
   end
 
+  # We show the form if we have one, and we don't have a bd_request_status with 
+  # InProgress or Success
   def show_request_form?
-    # have a request form, and do not have a status_response or have one with
-    # a validation error. 
+    # have a request form, and do not have a status_response with a normal
+    # code.  We show the form if validation or unexpected error,
+    # so they can try again. 
     self.request_prompt_response && ! (
-      self.status_response && self.status_response.view_data[:status] != BorrowDirectController::ValidationError
+      self.status_response && [BorrowDirectController::InProgress, BorrowDirectController::Successful].include?(self.status_response.view_data[:status])
     )
   end
 
@@ -73,6 +76,14 @@ class BorrowDirectPresenter
 
   def show_link_response?
     (! self.show_request_form?) && (! self.show_not_available?) && self.link_response
+  end
+
+  def could_not_place_request?
+    self.status_response && self.status_response.view_data[:status] == BorrowDirectController::Error
+  end
+
+  def show_confirmation?
+    self.status_response && self.status_response.view_data[:status] == BorrowDirectController::Successful
   end
 
   # nil or a string
