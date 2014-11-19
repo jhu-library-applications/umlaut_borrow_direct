@@ -41,6 +41,76 @@ In your local `./app/controllers/umlaut_controller.rb`, in the
 
     resolve_sections.insert_section UmlautBorrowDirect.resolve_section_definition, :before => "document_delivery"
 
+### Add a local controller
+
+Placing a request with BorrowDirect requires the current user's barcode. But Umlaut 
+has no login system at all, and even if it did it wouldn't know how to figure out 
+the current user's barcode in your local system. 
+
+The solution at present is that you need to provide a BorrowDirectController
+in your local app, that implements a #current_patron_barcode method that returns
+the current user's barcode. It's also up to you to implement some kind of auth/login
+system to enforce/determine the current user, which you can do in this controller,
+or elsewhere. 
+
+If you use Shibboleth, this might just be protecting the `/borrow_direct` URL in
+your application with shibboleth, and then extracting the user's identity from
+the Shibboleth-set environmental variables. In my own system, we need to do
+another step to look up their barcode from their Shibboleth supplied identity. 
+
+Your custom controller can raise a BorrowDirectController::UserReportableError
+with a message to be shown to the user on any errors. 
+
+Here's my own BorrowDirectController:
+
+~~~ruby
+# app/controllers/borrow_direct_controller.rb
+
+require 'httpclient'
+require 'nokogiri'
+# Local override of BorrowDirectController from UmlautBorrowDirect, which
+# uses Shibboleth to get a JHED lid to lookup a barcode. 
+#
+# Web app path /borrow_direct must be Shib protected in apache conf, or you'll
+# get a "No authorized JHED information received error"
+class BorrowDirectController < UmlautBorrowDirect::ControllerImplementation
+  def patron_barcode
+    # get from Shib
+    jhed_lid = request.env['eppn']
+    # strip off the @johnshopksins.edu
+    jhed_lid.sub!(/\@johnshopkins\.edu$/, '')
+
+    if jhed_lid.nil?
+      raise UserReportableError.new("No authorized JHED information received, something has gone wrong.")
+    end
+    # Now we need to lookup the barcode though. 
+    barcode = jhed_to_horizon_barcode(jhed_lid)
+    if barcode.nil?
+      raise UserReportableError.new("No Library Borrower account could be found for JHED login ID #{jhed_lid}. Please contact the Help Desk at your home library for help.")
+    end
+
+    return barcode
+  end
+
+  protected
+  # use the borrower lookup HTTP service we already have running for Catalyst
+  # lookup barcode. May need firewall opened on server service runs on. 
+  def jhed_to_horizon_barcode(jhed_id)
+    req_url = "#{UmlautJh::Application.config.horizon_borrower_lookup_url}?other_id=#{CGI.escape jhed_id}"
+    http = HTTPClient.new
+    xml = Nokogiri::XML(http.get_content(req_url))
+    barcode = xml.at_xpath("borrowers/borrower/barcodes/barcode/text()").to_s
+    if barcode.empty?
+      barcode = nil
+      Rails.logger.error("BorrowDirect: No barcode could be found for JHED `#{jhed_id}`. Requested `#{req_url}`. Response `#{xml.to_xml}`")
+    end
+    return barcode
+  end
+end
+~~~
+
+
+
 ## Customizations
 
 All text is done using Rails i18n, see `config/locales/en.yml` in this plugin's source. 
