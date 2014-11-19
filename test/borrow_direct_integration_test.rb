@@ -47,7 +47,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         assert_select ".borrow-direct-request-form" do |form_element|
           form_element = form_element.first
 
-          assert_equal   "post", form_element["method"]          
+          assert_equal   UmlautBorrowDirect::Engine.config.http_submit_method.to_s, form_element["method"]          
           assert form_element["action"].present?
 
           assert_select "select[name=pickup_location]" do 
@@ -125,7 +125,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       # get the form to submit it
       form = (css_select ".borrow-direct-request-form").first
       
-      post form["action"]
+      get form["action"]
       follow_redirect!
 
       assert_borrow_direct_section do 
@@ -141,7 +141,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       form = (css_select ".borrow-direct-request-form").first
       pickup_location = (css_select form, "option")[1].children.first.to_s
       
-      post form["action"], :pickup_location => pickup_location
+      get form["action"], :pickup_location => pickup_location
       
       # Wait on the bg_thread to complete using hacky just for testing
       # mechanism. This will make sure it's HTTP transaction is in the
@@ -168,7 +168,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         form = (css_select ".borrow-direct-request-form").first
         pickup_location = (css_select form, "option")[1].children.first.to_s
         
-        post form["action"], :pickup_location => pickup_location
+        get form["action"], :pickup_location => pickup_location
         
         # Wait on the bg_thread to complete using hacky just for testing
         # mechanism. This will make sure it's HTTP transaction is in the
@@ -190,7 +190,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
     end
 
     test "routing" do
-      assert_recognizes({ controller: 'borrow_direct', action: 'submit_request', :service_id => "service_id", :request_id => "1" }, { path: '/borrow_direct/service_id/1', method: :post })
+      assert_recognizes({ controller: 'borrow_direct', action: 'submit_request', :service_id => "service_id", :request_id => "1" }, { path: '/borrow_direct/service_id/1', method: UmlautBorrowDirect::Engine.config.http_submit_method })
     end
 
 

@@ -12,7 +12,10 @@ module UmlautBorrowDirect
     ValidationError = "validation_error" # user input error
     Error           = "error" # system error
 
-    # Will POST here as /borrow_direct/:service_id/:request_id
+    # Will http GET to here as /borrow_direct/:service_id/:request_id
+    # (really should be POST, but Shibboleth and other SSO protection
+    # have a problem with that, bah. The fact that we are immediately redirecting
+    # should keep it from being as big a deal.)
     #
     # Will return a 500 if service_id or service_response_id can't be found
     def submit_request    

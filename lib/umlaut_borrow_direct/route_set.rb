@@ -7,7 +7,9 @@ module UmlautBorrowDirect
 
     def borrow_direct
       add_routes do |options|
-        post "borrow_direct/:service_id/:request_id" => "borrow_direct#submit_request", :as => "borrow_direct_submit"
+        match "borrow_direct/:service_id/:request_id" => "borrow_direct#submit_request", 
+          :via => UmlautBorrowDirect::Engine.config.http_submit_method,
+          :as => "borrow_direct_submit"
       end
     end
   end

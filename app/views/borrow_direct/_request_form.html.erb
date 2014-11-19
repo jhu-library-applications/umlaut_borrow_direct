@@ -1,6 +1,6 @@
 <%= form_tag( 
     borrow_direct_submit_path(:request_id => response.request.id, :service_id => response.service_id),
-    :method => :post, :role => "form", :class => "borrow-direct-request-form") do %>
+    :method => UmlautBorrowDirect::Engine.config.http_submit_method, :role => "form", :class => "borrow-direct-request-form") do %>
 
 
     <div class="row">
