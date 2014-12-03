@@ -62,8 +62,8 @@ class BorrowDirectAdaptor < Service
         # a consolation direct link response
         msg =  "BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n"
         msg += "    * BD url: #{finditem.last_request_uri}\n"
-        msg += "    * Posted with json payload: #{finditem.last_request_json}"
-        msg += "    * Returned error: #{e.inspect}"
+        msg += "    * Posted with json payload: #{finditem.last_request_json}\n"
+        msg += "    * Returned error: #{e.inspect}\n"
         Rails.logger.error(msg)
 
         make_link_to_search_response(request)
