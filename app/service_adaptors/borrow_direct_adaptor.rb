@@ -60,7 +60,12 @@ class BorrowDirectAdaptor < Service
       rescue BorrowDirect::Error => e 
         # BD didn't let us check availability, log it and give them
         # a consolation direct link response
-        Rails.logger.error("BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n   #{e.inspect}\n   #{request.inspect}")
+        msg =  "BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n"
+        msg += "    * BD url: #{finditem.last_request_uri}\n"
+        msg += "    * Posted with json payload: #{finditem.last_request_json}"
+        msg += "    * Returned error: #{e.inspect}"
+        Rails.logger.error(msg)
+
         make_link_to_search_response(request)
         # And mark it as an error so error message will be displayed. Let's
         # mark it a temporary error, so it'll be tried again later, it might
