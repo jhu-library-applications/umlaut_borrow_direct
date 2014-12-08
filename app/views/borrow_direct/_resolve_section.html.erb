@@ -19,7 +19,7 @@
 
 <% if bd_presenter.show_link_response?  %>
     <%# display it the normal way with a standard response type %>
-    <ul>
+    <ul class="response_list">
         <%= render renderer.item_render_hash(bd_presenter.link_response) %>
     </ul>
 <% end %>
