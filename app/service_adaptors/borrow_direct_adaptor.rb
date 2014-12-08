@@ -12,6 +12,11 @@ class BorrowDirectAdaptor < Service
   attr_accessor :library_symbol
 
   def initialize(config)
+    # testing shows truncating titles to 5 words results in fewer
+    # false negatives seemingly without significant false positives. 
+    # but you can set to nil/empty to disable truncation, or
+    # set to a different number. 
+    @limit_title_words = 5 
     @display_name = "BorrowDirect"
     @http_timeout = 20
     super
@@ -92,9 +97,17 @@ class BorrowDirectAdaptor < Service
   end
 
   def make_link_to_search_response(request)
+    title = get_search_title(request.referent)
+
+    unless @limit_title_words.blank? || title.blank?
+      if title.index(/((.+?[ ,.:\;]+){5})/)
+        title = title.slice(0, $1.length).gsub(/[ ,.:\;]+$/, '')
+      end
+    end
+
     url = BorrowDirect::GenerateQuery.new(@html_query_base_url).best_known_item_query_url_with(
       :isbn   => request.referent.isbn,
-      :title  => get_search_title(request.referent),
+      :title  => title,
       :author => get_search_creator(request.referent)
     )
 

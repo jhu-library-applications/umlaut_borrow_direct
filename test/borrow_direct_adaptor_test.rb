@@ -30,6 +30,26 @@ describe "BorrowDirectAdaptor" do
     @service = BorrowDirectAdaptor.new(@service_config.merge("service_id" => "test_bd"))
   end
 
+  it "truncates long titles in search links" do
+    with_service_config(@service_config_list) do
+      request = fake_umlaut_request("resolve?title=Modern+agriculture%2C+based+on+%22Essentials+of+the+new+agriculture%22+by+Henry+Jackson+Waters%2C&aulast=Grimes")
+      @service.make_link_to_search_response(request)
+
+      response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_link_to_search)
+
+      assert response.view_data[:url].present?
+      url = response.view_data[:url]
+
+      params = CGI.parse(URI.parse(url).query)
+
+      bd_query = params["query"].first
+
+      clauses = bd_query.split(" and ")
+
+      assert(clauses.any? {|c| c == 'au="Grimes"'}, "Includes author clause")
+      assert(clauses.any? {|c| c == 'ti="modern agriculture based on essentials"'}, "Includes title clause")
+    end
+  end
 
   it "does nothing for a non-book-like object" do
     request = fake_umlaut_request("resolve?sid=google&auinit=RD&aulast=Kaplan&atitle=The+coming+anarchy&title=The+Atlantic+monthly&volume=273&issue=2&date=1994&spage=44&issn=1072-7825")
