@@ -46,17 +46,33 @@ module UmlautBorrowDirect
   # of the borrow_direct section. 
   def self.section_highlights_filter
     proc {|umlaut_request, sections|
+        if umlaut_request.get_service_type("bd_link_to_search").present?
+          # highlight it, but leave existing hilights there
+          sections << "borrow_direct"
+        end
+
         if umlaut_request.get_service_type("bd_request_prompt").present?
           # we have a verified BD-requestable, highlight it and NOT
           # document_delivery
           sections.delete("document_delivery")
-          sections << "borrow_direct"
-        elsif foo = umlaut_request.get_service_type("bd_request_prompt").present?
-          # request has been placed, highlight it and NOTHING else. 
-        elsif umlaut_request.get_service_type("bd_link_to_search").present?
-          # highlight it, but leave existing hilights there
-          sections << "borrow_direct"
+          sections << "borrow_direct"          
         end
+
+        # If request is in progress or succesful, highlight it and not docdel. 
+        # If request failed, highlight it AND docdel. 
+        if umlaut_request.get_service_type("bd_request_status").present?
+          response = umlaut_request.get_service_type("bd_request_status").first
+          if [ BorrowDirectController::InProgress, 
+               BorrowDirectController::Successful].include? response.view_data[:status]
+            sections.delete("document_delivery")
+            sections << "borrow_direct" 
+          elsif BorrowDirectController::Error == response.view_data[:status]
+            sections << "document_delivery"
+            secitons << "borrow_direct" 
+          end
+        end
+        
+        sections.uniq!
       }
   end
 
