@@ -68,7 +68,7 @@ module UmlautBorrowDirect
             sections << "borrow_direct" 
           elsif BorrowDirectController::Error == response.view_data[:status]
             sections << "document_delivery"
-            secitons << "borrow_direct" 
+            sections << "borrow_direct" 
           end
         end
         
