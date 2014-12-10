@@ -38,6 +38,28 @@ module UmlautBorrowDirect
     }
   end
 
+  # In a local app UmlautController:
+  #     umlaut_config do
+  #        add_section_highlights_filter! UmlautBorrowDirect.section_highlights_filter
+  #
+  # Applies some default rules for white-background-highlighting
+  # of the borrow_direct section. 
+  def self.section_highlights_filter
+    proc {|umlaut_request, sections|
+        if umlaut_request.get_service_type("bd_request_prompt").present?
+          # we have a verified BD-requestable, highlight it and NOT
+          # document_delivery
+          sections.delete("document_delivery")
+          sections << "borrow_direct"
+        elsif foo = umlaut_request.get_service_type("bd_request_prompt").present?
+          # request has been placed, highlight it and NOTHING else. 
+        elsif umlaut_request.get_service_type("bd_link_to_search").present?
+          # highlight it, but leave existing hilights there
+          sections << "borrow_direct"
+        end
+      }
+  end
+
   # Array of strings of all service type value names UmlautBorrowDirect does. 
   def self.service_type_values
     %w{bd_link_to_search bd_request_prompt bd_not_available bd_request_status}

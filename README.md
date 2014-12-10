@@ -39,7 +39,10 @@ TODO: Pointing at production vs dev borrowdirect. Right now it's always dev.
 In your local `./app/controllers/umlaut_controller.rb`, in the
 `umlaut_config.configure do` section, add:
 
+    # Adds borrow_direct section to page
     resolve_sections.insert_section UmlautBorrowDirect.resolve_section_definition, :before => "document_delivery"
+    # Supplies logic for when to highlight borrow_direct section
+    add_section_highlights_filter!  UmlautBorrowDirect.section_highlights_filter
 
 ### Add a local controller
 
