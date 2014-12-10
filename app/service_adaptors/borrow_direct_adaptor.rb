@@ -19,6 +19,9 @@ class BorrowDirectAdaptor < Service
     @limit_title_words = 5 
     @display_name = "BorrowDirect"
     @http_timeout = 20
+    # Abort for these rfr_id's -- keep from searching BD when
+    # we came from BD. 
+    @suppress_rfr_ids = ["info:sid/BD"]
     super
   end
 
@@ -31,6 +34,10 @@ class BorrowDirectAdaptor < Service
   end
 
   def handle(request)
+    if request.referrer_id && @suppress_rfr_ids.include?(request.referrer_id)
+      return request.dispatched(self, true)
+    end
+
     if ! appropriate_citation_type?(request)
       # we do nothing if it looks like an article or journal title. 
       return request.dispatched(self, true)
