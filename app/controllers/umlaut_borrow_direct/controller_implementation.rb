@@ -25,9 +25,11 @@ module UmlautBorrowDirect
       @request.dispatched(@service, DispatchedService::InProgress)
 
       # add a bd_request_status object as a place to mark that we are in progress
-      # specifically with placing a request
+      # specifically with placing a request, and blanking out any previous
+      # errors from existing one. 
       set_status_response(
-        :status => InProgress
+        :status => InProgress,
+        :error_user_message => ""
       )
 
       # We need to have a barcode to make a request. Custom sub-class must
