@@ -19,6 +19,9 @@ class BorrowDirectAdaptor < Service
     @limit_title_words = 5 
     @display_name = "BorrowDirect"
     @http_timeout = 20
+    # set to 'warn', 'info', 'debug', etc to turn on logging
+    # of succesful FindItem api requests. Useful for looking at error rate. 
+    @log_finditem_success_to = nil
     # Abort for these rfr_id's -- keep from searching BD when
     # we came from BD. 
     @suppress_rfr_ids = ["info:sid/BD"]
@@ -54,6 +57,12 @@ class BorrowDirectAdaptor < Service
         finditem = BorrowDirect::FindItem.new(@find_item_patron_barcode, @library_symbol)
         finditem.timeout = @http_timeout
         response = finditem.find(:isbn => request.referent.isbn)
+
+        # Log success if configured, used for looking at error rate
+        if @log_finditem_success_to
+          Rails.logger.send(@log_finditem_success_to, "BorrowDirect: @log_finditem_success_to: FindItem returned successfully (#{request.referent.isbn})")
+        end
+
         if response.requestable?
           # Mark it requestable!
           request.add_service_response( 
@@ -73,9 +82,9 @@ class BorrowDirectAdaptor < Service
         # BD didn't let us check availability, log it and give them
         # a consolation direct link response
         msg =  "BorrowDirect returned error on FindItem, resorting to a bd_link_to_search response instead.\n"
+        msg += "    * Returned error: #{e.inspect}\n"
         msg += "    * BD url: #{finditem.last_request_uri}\n"
         msg += "    * Posted with json payload: #{finditem.last_request_json}\n"
-        msg += "    * Returned error: #{e.inspect}\n"
         Rails.logger.error(msg)
 
         make_link_to_search_response(request)
