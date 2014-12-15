@@ -22,7 +22,8 @@ describe "BorrowDirectAdaptor" do
     }
     @service_config_list = {'default' => {
       "services" => {
-          "test_bd" => @service_config
+          "test_bd" => @service_config,
+          "test_holding" => {"type" => "DummyService", "priority" => 1}
         }
       }
     }
@@ -77,6 +78,98 @@ describe "BorrowDirectAdaptor" do
       assert response.view_data["url"].present?
       assert response.view_data["url"].start_with? @test_html_query_base_url
     end
+  end
+
+  describe "for local availability" do
+    before do
+      @available_status = UmlautController.umlaut_config.holdings.available_statuses.first
+    end
+
+    it "suppresses when :holding present with available status" do
+      with_service_config(@service_config_list) do
+        request = fake_umlaut_request("/resolve?title=title&author=au")
+        request.add_service_response(
+          :service => DummyService.new("service_id" => "test_holding", "priority" => 1),
+          :service_type_value => :holding,
+          :status => @available_status
+        )
+
+        @service.handle(request)
+
+        assert_dispatched request, "test_bd"
+
+        assert_service_responses(request, "test_bd", :number => 0)
+      end
+    end
+
+    it "does not suppress for :holding with MatchUnsure" do
+      with_service_config(@service_config_list) do
+        request = fake_umlaut_request("/resolve?title=title&author=au")
+        request.add_service_response(
+          :service => DummyService.new("service_id" => "test_holding", "priority" => 1),
+          :service_type_value => :holding,
+          :match_reliability => ServiceResponse::MatchUnsure,
+          :status => @available_status
+        )
+
+        @service.handle(request)
+
+        assert_dispatched request, "test_bd"
+
+        assert_service_responses(request, "test_bd", :number => 1)
+      end
+    end
+
+    it "does not suppress for holding without available status" do
+      with_service_config(@service_config_list) do
+        request = fake_umlaut_request("/resolve?title=title&author=au")
+        request.add_service_response(
+          :service => DummyService.new("service_id" => "test_holding", "priority" => 1),
+          :service_type_value => :holding,
+          :status => "Checked out really not available can't get it"
+        )
+
+        @service.handle(request)
+
+        assert_dispatched request, "test_bd"
+
+        assert_service_responses(request, "test_bd", :number => 1)
+      end
+
+    end
+
+    describe "with custom local avail check" do
+      before do
+        UmlautController.umlaut_config.borrow_direct ||= {}
+
+        @previous_local_availability_check = UmlautController.umlaut_config.borrow_direct.local_availability_check
+
+        UmlautController.umlaut_config.borrow_direct.local_availability_check = proc do |request, service|
+          false
+        end        
+      end
+
+      after do
+        UmlautController.umlaut_config.borrow_direct.local_availability_check = @previous_local_availability_check        
+      end
+
+      it "uses custom local avail check" do      
+        with_service_config(@service_config_list) do
+          request = fake_umlaut_request("/resolve?title=title&author=au")
+          request.add_service_response(
+            :service => DummyService.new("service_id" => "test_holding", "priority" => 1),
+            :service_type_value => :holding
+          )
+
+          @service.handle(request)
+
+          assert_dispatched request, "test_bd"
+
+          assert_service_responses(request, "test_bd", :number => 1)         
+        end
+      end
+    end
+
   end
 
   describe "with live connection to BD", :vcr do
