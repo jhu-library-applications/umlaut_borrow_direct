@@ -120,6 +120,39 @@ All text is done using Rails i18n, see `config/locales/en.yml` in this plugin's 
 You can customize all text with a local locale file in your application, you need only
 override keys you want to override. 
 
+### Local Availability Check
+
+By default, no Borrow Direct area will be shown on the screen if Umlaut believes
+the item is locally available. 
+
+By default, Umlaut knows the item is locally available if you have an
+Umlaut service which produces :holding-type responses, and there
+are holding responses present which:
+* Have a :status included in configured `holdings.available_statuses` (by default 'Available')
+* Do not have a `:match_reliability` set to `MatchUnsure`. 
+
+You can customize the logic used for checking local availability, however
+you like, including turning it off. Set a proc/lambda item in UmlautController
+configuration borrow_direct.local_availability_check. The proc takes
+two arguments, the Umlaut request, and the current BorrowDirectAdaptor service. 
+
+For instance, to ignore local availability entirely:
+
+~~~ruby
+# app/controllers/umlaut_controller.rb
+# ...
+umlaut_config.configure do 
+  borrow_direct do
+    local_availability_check proc {|request, service|
+      false
+    }
+  end
+end
+~~~
+
+You can use the proc object in BorrowDirectAdaptor::DefaultLocalAvailabilityCheck
+in your logic if you want. 
+
 ## Technical Details
 
 ### Custom ServiceTypeValue keys
