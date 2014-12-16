@@ -53,9 +53,12 @@ if errors.present?
         </div>
 
     <% else %>
-        <div class="borrow-direct-error alert alert-danger" role="alert">
-            <p><strong>Warning</strong>, there was a software error in determining
-                BorrowDirect availability.</p>
+        <div class="borrow-direct-error alert alert-warning" role="alert">
+            <p> <%= t('umlaut.display_sections.borrow_direct.error') %>
+                <% if bd_presenter.show_link_response? %>
+                    <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
+                <% end %>
+            </p>
 
             <%  if timeout = errors.find do |ds| 
                     ds.exception_info.try {|h| h[:class_name] == "BorrowDirect::HttpTimeoutError"}

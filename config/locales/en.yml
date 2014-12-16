@@ -32,5 +32,6 @@ en:
       borrow_direct:
         title: "BorrowDirect"
         prompt: "Get item from one of our partner libraries in 4-6 days. Checkout period is 12 weeks, with no renewals."
-
+        error: There was a software error determining BorrowDirect availability. 
+        error_workaround: You can still check BorrowDirect manually.
 
