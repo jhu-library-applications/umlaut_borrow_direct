@@ -5,14 +5,14 @@ http_interactions:
     uri: https://bdtest.relais-host.com/dws/item/available
     body:
       encoding: UTF-8
-      string: ! '{"PartnershipId":"BD","Credentials":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Barcode":DUMMY_BD_PATRON},"ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}]}'
+      string: ! '{"PartnershipId":"BD","Credentials":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Barcode":"DUMMY_BD_PATRON"},"ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}]}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
       Accept:
       - ! '*/*'
       Date:
-      - Thu, 13 Nov 2014 20:17:37 GMT
+      - Wed, 14 Jan 2015 21:00:32 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Thu, 13 Nov 2014 20:17:42 GMT
+      - Wed, 14 Jan 2015 21:00:33 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -34,16 +34,15 @@ http_interactions:
       - keep-alive
     body:
       encoding: US-ASCII
-      string: ! '{"Item":{"Available":true,"SearchTerm":"isbn=9789810743734","AuthorizationId":"LhnQGNukKQM73XuurWypGZpg91Y","RequestLink":{"ButtonLink":"AddRequest","ButtonLabel":"Request","RequestMessage":"Request
-        this item"},"PickupLocations":{"PickupLocation":["*Milton S. Eisenhower Library","APL
-        - EP STUDENTS - Ed Center","APL STAFF - Room 5-17","Arthur Friedheim Library","Columbia
-        Center","Harbor East","Harrison Medical Library-Bayview","Institute of the
-        History of Medicine","JH Medical Campus Office (faculty and staff)","JHMI
+      string: ! '{"Item":{"Available":true,"SearchTerm":"isbn=9789810743734","AuthorizationId":"xIZh49H9_pdVKOCij8SfIFUjdjM","PickupLocations":{"PickupLocation":["*Milton
+        S. Eisenhower Library","APL - EP STUDENTS - Ed Center","APL STAFF - Room 5-17","Arthur
+        Friedheim Library","Columbia Center","Harbor East","Harrison Medical Library-Bayview","Institute
+        of the History of Medicine","JH Medical Campus Office (faculty and staff)","JHMI
         Pickup - Armstrong 306","JHMI Pickup - BSPH E4643","JHMI Pickup - Hampton
         House 9th floor","JHMI Pickup - PCTB 115-116","JHMI Pickup - School of Nursing
         313","JHU Homewood Office (faculty and grad students)","Montgomery Library
         Resource Center","SAIS Library","Washington Library Resource Center","Welch
         Medical Library","Wilmer Friedenwald Library"]}}}'
     http_version: 
-  recorded_at: Thu, 13 Nov 2014 20:17:42 GMT
+  recorded_at: Wed, 14 Jan 2015 21:00:33 GMT
 recorded_with: VCR 2.9.3

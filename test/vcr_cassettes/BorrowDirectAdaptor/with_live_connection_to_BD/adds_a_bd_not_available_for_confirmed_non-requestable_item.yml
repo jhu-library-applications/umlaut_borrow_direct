@@ -8,11 +8,11 @@ http_interactions:
       string: ! '{"PartnershipId":"BD","Credentials":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Barcode":"DUMMY_BD_PATRON"},"ExactSearch":[{"Type":"ISBN","Value":"0109836413"}]}'
     headers:
       User-Agent:
-      - ruby borrow_direct gem 0.9.0 (HTTPClient 2.5.2) https://github.com/jrochkind/borrow_direct
+      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
       Accept:
       - ! '*/*'
       Date:
-      - Thu, 30 Oct 2014 16:36:50 GMT
+      - Wed, 14 Jan 2015 21:00:36 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Thu, 30 Oct 2014 16:36:52 GMT
+      - Wed, 14 Jan 2015 21:00:37 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -36,54 +36,5 @@ http_interactions:
       encoding: US-ASCII
       string: ! '{"Error":{"ErrorNumber":"PUBFI002","ErrorMessage":"No result"}}'
     http_version: 
-  recorded_at: Thu, 30 Oct 2014 16:36:52 GMT
-- request:
-    method: post
-    uri: https://bdtest.relais-host.com/portal-service/user/authentication/patron
-    body:
-      encoding: UTF-8
-      string: ! '{"AuthenticationInformation":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}}'
-    headers:
-      User-Agent:
-      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
-      Accept:
-      - ! '*/*'
-      Date:
-      - Mon, 17 Nov 2014 21:06:43 GMT
-      Content-Type:
-      - application/json
-      Accept-Language:
-      - en
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx/1.4.1
-      Date:
-      - Mon, 17 Nov 2014 21:06:45 GMT
-      Content-Type:
-      - application/json;charset=UTF-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - visited=yes
-      Expires:
-      - Thu, 01 Jan 1970 00:00:00 GMT
-      - Thu, 01 Jan 1970 00:00:00 GMT
-      Content-Language:
-      - en
-      Pragma:
-      - no-cache
-      Cache-Control:
-      - no-cache, no-store, max-age=0
-    body:
-      encoding: US-ASCII
-      string: ! '{"Authentication":{"AuthnUserInfo":{"AId":"_ZS_7T_-BrqZF0t1zkZn7JbXwRQ","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","UserLogin":"DUMMY_BD_PATRON","FirstName":"Jonathan","LastName":"Rochkind","AllowLoanAddRequest":true,"AllowCopyAddRequest":false,"AllowSelDelivLoanChange":true,"AllowSelDelivCopyChange":false,"ILSProfile":{"EmailAddress":"jonathan@dnil.net","Telephone":"4105168886","AddressInformation":{"Address1":"Library
-        Systems","Address2":"MSE Library\r\nHomewood Campus"}}}}}'
-    http_version: 
-  recorded_at: Mon, 17 Nov 2014 21:06:45 GMT
+  recorded_at: Wed, 14 Jan 2015 21:00:37 GMT
 recorded_with: VCR 2.9.3

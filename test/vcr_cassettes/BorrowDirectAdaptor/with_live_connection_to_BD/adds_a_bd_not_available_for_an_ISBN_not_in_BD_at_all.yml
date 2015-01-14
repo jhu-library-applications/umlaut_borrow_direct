@@ -8,11 +8,11 @@ http_interactions:
       string: ! '{"PartnershipId":"BD","Credentials":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Barcode":"DUMMY_BD_PATRON"},"ExactSearch":[{"Type":"ISBN","Value":"000000000"}]}'
     headers:
       User-Agent:
-      - ruby borrow_direct gem 0.9.0 (HTTPClient 2.5.2) https://github.com/jrochkind/borrow_direct
+      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
       Accept:
       - ! '*/*'
       Date:
-      - Thu, 30 Oct 2014 16:36:14 GMT
+      - Wed, 14 Jan 2015 21:00:38 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Thu, 30 Oct 2014 16:36:22 GMT
+      - Wed, 14 Jan 2015 21:00:41 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -34,17 +34,9 @@ http_interactions:
       - keep-alive
     body:
       encoding: US-ASCII
-      string: ! '{"Item":{"Available":false,"SearchTerm":"isbn=000000000","AuthorizationId":"VK8L6Oh3_TG4-4wovKE2tDP3VF4","RequestLink":{"ButtonLink":"http://findit.library.jhu.edu/resolve?genre=book","ButtonLabel":"Request","RequestMessage":"Borrow
+      string: ! '{"Item":{"Available":false,"SearchTerm":"isbn=000000000","AuthorizationId":"xtwGxSz7BJVoBXCrnXxMnyPhChg","RequestLink":{"ButtonLink":"http://findit.library.jhu.edu/resolve?genre=book&sid=Relais&title=Cruise%20control&aufirst=Stephen%20C&aulast=Bett&isbn=0000000000&date=1996&pub=Ekstasis%20Editions&place=Victoria%2C%20B.C","ButtonLabel":"Request","RequestMessage":"Borrow
         Direct cannot fill this request at this time.  Please request through Interlibrary
-        Loan."},"PickupLocations":{"PickupLocation":["*Milton S. Eisenhower Library","APL
-        - EP STUDENTS - Ed Center","APL STAFF - Room 5-17","Arthur Friedheim Library","Columbia
-        Center","Harbor East","Harrison Medical Library-Bayview","Institute of the
-        History of Medicine","JH Medical Campus Office (faculty and staff)","JHMI
-        Pickup - Armstrong 306","JHMI Pickup - BSPH E4643","JHMI Pickup - Hampton
-        House 9th floor","JHMI Pickup - PCTB 115-116","JHMI Pickup - School of Nursing
-        313","JHU Homewood Office (faculty and grad students)","Montgomery Library
-        Resource Center","SAIS Library","Washington Library Resource Center","Welch
-        Medical Library","Wilmer Friedenwald Library"]}}}'
+        Loan."}}}'
     http_version: 
-  recorded_at: Thu, 30 Oct 2014 16:36:23 GMT
+  recorded_at: Wed, 14 Jan 2015 21:00:41 GMT
 recorded_with: VCR 2.9.3
