@@ -175,5 +175,11 @@ bd_request_status: A request is or has been placed
 * request_number: BD request confirmation number, for succesful request
 * error_user_message: An error message that can be shown publicly to user
 
+### BD request logic
 
+The BD API's at present only allow lookup by ISBN. 
+
+If there is no ISBN present in the current request, the adaptor will instead display a link to search results in the standard BD interface, for the current request by author/title. 
+
+If we have an ISBN, we'll try to do a BD FindItem API request. If we get an error--or timeout--from BD, we'll still display the link to search results in standard BD interface as a fallback. 
 
