@@ -41,7 +41,7 @@ In your local `./app/controllers/umlaut_controller.rb`, in the
 
 ~~~ruby
 # Adds borrow_direct section to page
-resolve_sections.insert_section UmlautBorrowDirect.resolve_section_definition, :before => "document_delivery"
+resolve_sections.insert_section UmlautBorrowDirect.resolve_section_definition, :before => "holding"
 # Supplies logic for when to highlight borrow_direct section
 add_section_highlights_filter!  UmlautBorrowDirect.section_highlights_filter
 ~~~
