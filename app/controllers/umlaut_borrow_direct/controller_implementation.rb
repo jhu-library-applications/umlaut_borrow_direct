@@ -64,7 +64,7 @@ module UmlautBorrowDirect
             set_status_response(status_response_data, request)
 
             if service
-              service.bd_api_log(isbn, "RequestItem", e.class, requester.last_request_time)
+              service.bd_api_log(isbn, "RequestItem", e, requester.last_request_time)
             end
 
 

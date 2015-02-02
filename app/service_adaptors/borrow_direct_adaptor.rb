@@ -91,7 +91,7 @@ class BorrowDirectAdaptor < Service
         Rails.logger.error(msg)
 
         # Special BD error log if configured
-        bd_api_log(request.referent.isbn, "FindItem", e.class, finditem.last_request_time)
+        bd_api_log(request.referent.isbn, "FindItem", e, finditem.last_request_time)
 
         make_link_to_search_response(request)
         # And mark it as an error so error message will be displayed. Let's
@@ -120,8 +120,12 @@ class BorrowDirectAdaptor < Service
   end
 
   def bd_api_log(isbn, action, result, timing)
+    if result.kind_of? Exception
+      result = "#{result.class}/#{result.message}"
+    end
+
     if @bd_api_log_level
-      @bd_api_logger.send(@bd_api_log_level, "BD API log\t#{action}\t#{result}\t#{timing.round(1)}\tisbn=#{isbn}")
+      @bd_api_logger.send(@bd_api_log_level, "BD API log\t#{action}\t#{result}\t#{timing.round(1) if timing}\tisbn=#{isbn}")
     end
   end
 
