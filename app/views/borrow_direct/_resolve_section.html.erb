@@ -1,12 +1,5 @@
 <% bd_presenter = BorrowDirectPresenter.new(renderer) %>
 
-<% if bd_presenter.show_confirmation? %>
-    <p class="borrow-direct-confirmation alert alert-success">
-        <%= t("umlaut.services.borrow_direct_adaptor.bd_request_status.confirmation") %>
-        <%= bd_presenter.status_response.view_data["request_number"] %>
-    </p>
-<% end %>
-
 
 <% if bd_presenter.show_link_response?  %>
     <%# display it the normal way with a standard response type %>
@@ -15,9 +8,16 @@
     </ul>
 <% end %>
 
-<% if bd_presenter.show_link_response? && bd_presenter.show_request_form? %>
+<% if bd_presenter.show_link_response? && (bd_presenter.show_request_form? || bd_presenter.show_not_available? || bd_presenter.service_in_progress? ) %>
     <%# separator between link and form when both are present %>
     <hr>
+<% end %>
+
+<% if bd_presenter.show_confirmation? %>
+    <p class="borrow-direct-confirmation alert alert-success">
+        <%= t("umlaut.services.borrow_direct_adaptor.bd_request_status.confirmation") %>
+        <%= bd_presenter.status_response.view_data["request_number"] %>
+    </p>
 <% end %>
 
 <% if bd_presenter.show_request_form? %>
@@ -51,26 +51,30 @@ if errors.present?
     %>
     <% if bd_presenter.could_not_place_request? %>
         <div class="borrow-direct-error alert alert-danger" role="alert">
-            <p><%= t('umlaut.services.borrow_direct_adaptor.bd_request_status.error') %></p>
+            <p>
+                <%= t('umlaut.services.borrow_direct_adaptor.bd_request_status.error') %>
+                <% if bd_presenter.show_link_response? %>
+                    <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
+                <% end %>
+            </p>
             <% if bd_presenter.user_reportable_error %>
                 <p><%= bd_presenter.user_reportable_error %></p>
             <% end %>
         </div>
 
     <% else %>
-        <div class="borrow-direct-error alert alert-warning" role="alert">
+        <% if bd_presenter.show_link_response? %>
+            <hr>
+        <% end %>        
+
+        <div class="borrow-direct-error" role="alert">
             <p> <%= t('umlaut.display_sections.borrow_direct.error') %>
                 <% if bd_presenter.show_link_response? %>
                     <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
                 <% end %>
             </p>
-
-            <%  if timeout = errors.find do |ds| 
-                    ds.exception_info.try {|h| h[:class_name] == "BorrowDirect::HttpTimeoutError"}
-                end %>
-                <p class="borrow-direct-error-info">
-                    <%= timeout.exception_info[:message] %>
-                </p>
+            <% if bd_presenter.user_reportable_error %>
+                <p><%= bd_presenter.user_reportable_error %></p>
             <% end %>
         </div>
     <% end %>
