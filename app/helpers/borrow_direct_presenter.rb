@@ -52,10 +52,14 @@ class BorrowDirectPresenter
     request.service_types_in_progress?(renderer.service_type_values)
   end
 
-  # use our custom 'request being placed' message when appropriate
+  # use our custom in progress messages, for checking API, vs placing request.
   def spinner_render_hash
     render_hash = renderer.spinner_render_hash
-    render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_status.progress") if self.request_submission_in_progress?
+    if self.request_submission_in_progress?
+      render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_status.progress") 
+    else
+      render_hash[:locals][:progress_message] = I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_prompt.progress") 
+    end        
     return render_hash
   end
 

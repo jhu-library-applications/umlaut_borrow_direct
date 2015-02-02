@@ -16,22 +16,23 @@ en:
     services:
       borrow_direct_adaptor:
         bd_link_to_search:
-          display_text: Check BorrowDirect for item
-          notes: "Item may be available in BorrowDirect, try a search."
+          display_text: Check BorrowDirect for this item manually
+          notes: ""
         bd_request_prompt:
           pickup_prompt: "Please select a pickup location"
           request: Request
           pickup_validation: "You must choose a pickup location"
+          progress: "Checking BorrowDirect availability for you"
         bd_not_available:
-          display_text: "This item is not currently available from BorrowDirect"
+          display_text: "This edition is not available via Borrow Direct."
         bd_request_status:
-          progress: "Placing BorrowDirect Request"
+          progress: "Placing the request to BorrowDirect"
           error:  "Sorry, due to an error your request could not be placed."
           confirmation: "Your request has been submitted to BorrowDirect.  Request number:"
     display_sections:
       borrow_direct:
-        title: "BorrowDirect"
-        prompt: "Get item from one of our partner libraries in 4-6 days. Checkout period is 12 weeks, with no renewals."
+        title: "Request a copy from BorrowDirect"
+        prompt: "Get item from one of our partner libraries in 3-6 days. Checkout period is 12 weeks, with no renewals."
         error: There was a software error determining BorrowDirect availability. 
         error_workaround: You can still check BorrowDirect manually.
 

@@ -15,6 +15,11 @@
     </ul>
 <% end %>
 
+<% if bd_presenter.show_link_response? && bd_presenter.show_request_form? %>
+    <%# separator between link and form when both are present %>
+    <hr>
+<% end %>
+
 <% if bd_presenter.show_request_form? %>
     <% if str = bd_presenter.validation_error %>
         <p class="validation-error text-danger">
