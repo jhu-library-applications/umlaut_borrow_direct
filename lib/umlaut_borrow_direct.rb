@@ -54,6 +54,16 @@ module UmlautBorrowDirect
   # of the borrow_direct section. 
   def self.section_highlights_filter
     proc {|umlaut_request, sections|
+        # If it's not locally available, remove highlight from 'holding' --
+        # will remove highlights for checked out material for instance. 
+        # And add in document_delivery, although future lines may remove it again
+        # if BD is available. 
+        if ! self.locally_available?(umlaut_request)
+          sections.delete("holding")
+          sections << "document_delivery"
+        end
+
+
         if ( umlaut_request.get_service_type("bd_link_to_search").present? || 
              umlaut_request.get_service_type("bd_request_prompt").present? )
           # highlight BD section and NOT document_delivery if BD section is present
@@ -61,15 +71,10 @@ module UmlautBorrowDirect
           sections << "borrow_direct"          
         end
 
-        # If it's not locally available, remove highlight from 'holding' --
-        # will remove highlights for checked out material for instance. 
-        if ! self.locally_available?(umlaut_request)
-          sections.delete("holding")
-        end
+
 
 
         # If request is in progress or succesful, highlight it and not docdel. 
-        # If request failed, just highlight docdecl. 
         if umlaut_request.get_service_type("bd_request_status").present?
           response = umlaut_request.get_service_type("bd_request_status").first
           if [ BorrowDirectController::InProgress, 
