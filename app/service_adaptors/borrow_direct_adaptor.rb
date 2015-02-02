@@ -11,13 +11,6 @@ class BorrowDirectAdaptor < Service
 
   attr_accessor :library_symbol
 
-  DefaultLocalAvailabilityCheck = proc do |request, service|
-    request.get_service_type(:holding).find do |sr| 
-      UmlautController.umlaut_config.holdings.available_statuses.include?(sr.view_data[:status]) &&
-      sr.view_data[:match_reliability] != ServiceResponse::MatchUnsure 
-    end.present?
-  end
-
   def initialize(config)
     # testing shows truncating titles to 5 words results in fewer
     # false negatives seemingly without significant false positives. 
@@ -112,8 +105,7 @@ class BorrowDirectAdaptor < Service
   # By default, check for Umlaut holding responses, but can
   # be customized with config. 
   def locally_available?(request)
-    aProc = UmlautController.umlaut_config.lookup!("borrow_direct.local_availability_check") || DefaultLocalAvailabilityCheck
-    return aProc.call(request, self)
+    UmlautBorrowDirect.locally_available? request
   end
 
   # Right now, if and only if we have an ISBN
