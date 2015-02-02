@@ -56,6 +56,9 @@ class BorrowDirectAdaptor < Service
       return request.dispatched(self, true)
     end
 
+    # Always add a manual link to search results
+    make_link_to_search_response(request)
+
     if can_precheck_borrow_direct?(request)
       # pre-check it with BD api, this will take a while
       begin
@@ -93,15 +96,11 @@ class BorrowDirectAdaptor < Service
         # Special BD error log if configured
         bd_api_log(request.referent.isbn, "FindItem", e, finditem.last_request_time)
 
-        make_link_to_search_response(request)
         # And mark it as an error so error message will be displayed. Let's
         # mark it a temporary error, so it'll be tried again later, it might
         # be a temporary problem on BD, esp timeout.         
         return request.dispatched(self, DispatchedService::FailedTemporary, e)
       end
-    else
-      # If we can't pre-check, we return a link to search!
-      make_link_to_search_response(request)
     end
 
     return request.dispatched(self, true)

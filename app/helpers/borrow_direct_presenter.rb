@@ -61,7 +61,7 @@ class BorrowDirectPresenter
 
   # We show the form if we have one, and we don't have a bd_request_status with 
   # InProgress or Success
-  def show_request_form?
+  def show_request_form?    
     # have a request form, and do not have a status_response with a normal
     # code.  We show the form if validation or unexpected error,
     # so they can try again. 
@@ -75,7 +75,7 @@ class BorrowDirectPresenter
   end
 
   def show_link_response?
-    (! self.show_request_form?) && (! self.show_not_available?) && self.link_response
+    self.link_response
   end
 
   def could_not_place_request?

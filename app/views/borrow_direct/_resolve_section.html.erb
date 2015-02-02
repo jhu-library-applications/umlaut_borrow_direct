@@ -8,6 +8,13 @@
 <% end %>
 
 
+<% if bd_presenter.show_link_response?  %>
+    <%# display it the normal way with a standard response type %>
+    <ul class="response_list">
+        <%= render renderer.item_render_hash(bd_presenter.link_response) %>
+    </ul>
+<% end %>
+
 <% if bd_presenter.show_request_form? %>
     <% if str = bd_presenter.validation_error %>
         <p class="validation-error text-danger">
@@ -15,13 +22,6 @@
         </p>
     <% end %>
     <%= render "borrow_direct/request_form", :response => bd_presenter.request_prompt_response %>
-<% end %>
-
-<% if bd_presenter.show_link_response?  %>
-    <%# display it the normal way with a standard response type %>
-    <ul class="response_list">
-        <%= render renderer.item_render_hash(bd_presenter.link_response) %>
-    </ul>
 <% end %>
 
 <% if bd_presenter.show_not_available?  %>

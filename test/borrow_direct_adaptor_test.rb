@@ -181,9 +181,10 @@ describe "BorrowDirectAdaptor" do
 
         assert_dispatched request, "test_bd"
 
-        response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_request_prompt)
+        responses = assert_service_responses(request, "test_bd", :number => 2, :includes_type => [:bd_link_to_search, :bd_request_prompt])
 
-        assert response.view_data["pickup_locations"].present?
+        prompt_response = responses.find {|r| r.service_type_value_name == "bd_request_prompt"}
+        assert prompt_response.view_data["pickup_locations"].present?
       end
     end
 
@@ -195,7 +196,7 @@ describe "BorrowDirectAdaptor" do
 
         assert_dispatched request, "test_bd"
 
-        response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_not_available)
+        response = assert_service_responses(request, "test_bd", :number => 2, :includes_type => [:bd_not_available, :bd_link_to_search])
       end
     end
 
@@ -207,7 +208,7 @@ describe "BorrowDirectAdaptor" do
 
         assert_dispatched request, "test_bd"
 
-        response = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_not_available)
+        response = assert_service_responses(request, "test_bd", :number => 2, :includes_type => [:bd_link_to_search, :bd_not_available])
       end
     end
 
