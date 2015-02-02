@@ -42,10 +42,12 @@ module UmlautBorrowDirect
       @bg_thread = Thread.new(@request, @service, @request.referent.isbn) do |request, service, isbn|
         begin
 
-          request_number = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol).
-            make_request!(params[:pickup_location], :isbn => isbn)
+          requester = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol)
+          request_number = requester.make_request!(params[:pickup_location], :isbn => isbn)
 
           ActiveRecord::Base.connection_pool.with_connection do
+            service.bd_api_log(isbn, "RequestItem", "SUCCESS", requester.last_request_time)
+
             request.dispatched(service, DispatchedService::Successful)
             set_status_response({:status => Successful, :request_number => request_number }, request)
           end
@@ -60,6 +62,11 @@ module UmlautBorrowDirect
             status_response_data[:error_user_message] = e.message if e.kind_of? UserReportableError
 
             set_status_response(status_response_data, request)
+
+            if service
+              service.bd_api_log(isbn, "RequestItem", e.class, requester.last_request_time)
+            end
+
 
             # In testing, we kinda wanna re-raise this guy
             raise e if defined?(VCR::Errors::UnhandledHTTPRequestError) && e.kind_of?(VCR::Errors::UnhandledHTTPRequestError)

@@ -19,9 +19,14 @@ class BorrowDirectAdaptor < Service
     @limit_title_words = 5 
     @display_name = "BorrowDirect"
     @http_timeout = 20
+
+    # Log BD API calls to logger -- defaults to Rails.logger
+    @bd_api_logger = Rails.logger
+
     # set to 'warn', 'info', 'debug', etc to turn on logging
     # of succesful FindItem api requests. Useful for looking at error rate. 
-    @log_finditem_success_to = nil
+    # nil means don't log. 
+    @bd_api_logger_level = nil
     # Abort for these rfr_id's -- keep from searching BD when
     # we came from BD. 
     @suppress_rfr_ids = ["info:sid/BD"]
@@ -59,9 +64,7 @@ class BorrowDirectAdaptor < Service
         response = finditem.find(:isbn => request.referent.isbn)
 
         # Log success if configured, used for looking at error rate
-        if @log_finditem_success_to
-          Rails.logger.send(@log_finditem_success_to, "BorrowDirect: @log_finditem_success_to: FindItem returned successfully (#{request.referent.isbn})")
-        end
+        bd_api_log(request.referent.isbn, "FindItem", "SUCCESS", finditem.last_request_time)
 
         if response.requestable?
           # Mark it requestable!
@@ -87,6 +90,9 @@ class BorrowDirectAdaptor < Service
         msg += "    * Posted with json payload: #{finditem.last_request_json}\n"
         Rails.logger.error(msg)
 
+        # Special BD error log if configured
+        bd_api_log(request.referent.isbn, "FindItem", e.class, finditem.last_request_time)
+
         make_link_to_search_response(request)
         # And mark it as an error so error message will be displayed. Let's
         # mark it a temporary error, so it'll be tried again later, it might
@@ -111,6 +117,12 @@ class BorrowDirectAdaptor < Service
   # Right now, if and only if we have an ISBN
   def can_precheck_borrow_direct?(request)
     request.referent.isbn.present?
+  end
+
+  def bd_api_log(isbn, action, result, timing)
+    if @bd_api_log_level
+      @bd_api_logger.send(@bd_api_log_level, "BD API log\t#{action}\t#{result}\t#{timing.round(1)}\tisbn=#{isbn}")
+    end
   end
 
   def make_link_to_search_response(request)

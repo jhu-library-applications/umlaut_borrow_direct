@@ -23,6 +23,9 @@ gem 'umlaut_borrow_direct'
       library_symbol: YOURSYMBOL
       find_item_patron_barcode: a_generic_barcode_that_can_be_used_for_FindItem_lookups
       html_query_base_url: https://example.edu/borrow_direct
+      # optionally log all BD API calls for analysis
+      bd_api_log_level: info
+
 ~~~
 
 If you want to take account of local availability (TBD), you want a priority
