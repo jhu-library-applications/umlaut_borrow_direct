@@ -67,11 +67,13 @@ class BorrowDirectPresenter
   # InProgress or Success
   def show_request_form?    
     # have a request form, and do not have a status_response with a normal
-    # code.  We show the form if validation or unexpected error,
-    # so they can try again. 
-    self.request_prompt_response && ! (
-      self.status_response && [BorrowDirectController::InProgress, BorrowDirectController::Successful].include?(self.status_response.view_data[:status])
-    )
+    # code.  We show the form if validation error so they can try again. 
+    # We do NOT show the form if submission error, it was too much stuff on screen,
+    # too confusing. 
+    self.request_prompt_response && (! bd_presenter.could_not_place_request?) &&
+    ! (  
+        self.status_response && [BorrowDirectController::InProgress, BorrowDirectController::Successful].include?(self.status_response.view_data[:status])
+      )
   end
 
   def show_not_available?
