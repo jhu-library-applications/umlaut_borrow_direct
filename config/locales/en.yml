@@ -24,7 +24,7 @@ en:
           pickup_validation: "You must choose a pickup location"
           progress: "Checking BorrowDirect availability for you"
         bd_not_available:
-          display_text: "This edition is not available via BorrowDirect."
+          display_text: "This edition is not available via BorrowDirect. You can use the link above to check BorrowDirect manually for other editions."
         bd_request_status:
           progress: "Placing the request to BorrowDirect"
           error:  "There was a problem submitting your request to BorrowDirect."
