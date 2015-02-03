@@ -24,15 +24,15 @@ en:
           pickup_validation: "You must choose a pickup location"
           progress: "Checking BorrowDirect availability for you"
         bd_not_available:
-          display_text: "This edition is not available via Borrow Direct."
+          display_text: "This edition is not available via BorrowDirect."
         bd_request_status:
           progress: "Placing the request to BorrowDirect"
-          error:  "There was a problem submitting your request to Borrow Direct."
+          error:  "There was a problem submitting your request to BorrowDirect."
           confirmation: "Your request has been submitted to BorrowDirect.  You will receive email confirmation shortly. Request number:"
     display_sections:
       borrow_direct:
         title: "Request a copy from BorrowDirect"
         prompt: "Get item from one of our partner libraries in 3-6 days. Checkout period is 12 weeks, with no renewals."
-        error: Unable to determine Borrow Direct availability for this edition. 
-        error_workaround: Please use the link above to check Borrow Direct for this item manually.
+        error: Unable to determine BorrowDirect availability for this edition. 
+        error_workaround: Please use the link above to check BorrowDirect for this item manually.
 
