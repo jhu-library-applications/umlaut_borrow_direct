@@ -34,7 +34,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
 
       assert_borrow_direct_section do      
         assert_select "a.response_link[href]", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.display_text")
-        assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
+        #assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
       end
     end
 
@@ -64,7 +64,7 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       assert_no_service_errors
 
       assert_borrow_direct_section do
-        assert_select ".umlaut-unavailable", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_not_available.display_text")
+        assert_select ".bd-api-unavailable", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_not_available.display_text")
       end
     end
 
@@ -110,11 +110,10 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         get "/resolve?isbn=#{@@requestable_isbn}"
         assert_borrow_direct_section do |el|          
           # the error message
-          assert_select ".borrow-direct-error"
-          assert_select ".borrow-direct-error-info"
+          assert_select ".borrow-direct-error"          
           # the link
           assert_select "a.response_link[href]", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.display_text")
-          assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
+          #assert_select ".response_notes", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.notes")
         end
       end
     end
