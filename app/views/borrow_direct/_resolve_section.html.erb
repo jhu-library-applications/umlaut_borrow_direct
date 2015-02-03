@@ -31,7 +31,7 @@
 
 <% if bd_presenter.show_not_available?  %>
     <%# display custom because we have no URL, and the standard thing insists on a link %>
-    <p class="umlaut-unavailable"><%= bd_presenter.not_available_response.view_data["display_text"] %></p>
+    <p class="bd-api-unavailable"><%= bd_presenter.not_available_response.view_data["display_text"] %></p>
 <% end %>
 
 <%# we do custom spinner, so we can customize label for 'placing request' %>
