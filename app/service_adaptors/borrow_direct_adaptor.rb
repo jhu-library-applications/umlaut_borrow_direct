@@ -9,7 +9,7 @@ class BorrowDirectAdaptor < Service
 
   required_config_params :library_symbol, :find_item_patron_barcode, :html_query_base_url
 
-  attr_accessor :library_symbol
+  attr_accessor :library_symbol, :http_timeout
 
   def initialize(config)
     # testing shows truncating titles to 5 words results in fewer

@@ -43,6 +43,7 @@ module UmlautBorrowDirect
         begin
 
           requester = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol)
+          requester.timeout = @service.http_timeout
           request_number = requester.make_request!(params[:pickup_location], :isbn => isbn)
 
           ActiveRecord::Base.connection_pool.with_connection do
@@ -148,7 +149,6 @@ module UmlautBorrowDirect
     end
 
     def set_status_response(properties, request = @request)
-      
       # do we already have one, or should we create a new one?
       if bd_status = @request.get_service_type(:bd_request_status).first
         bd_status.take_key_values(properties)
