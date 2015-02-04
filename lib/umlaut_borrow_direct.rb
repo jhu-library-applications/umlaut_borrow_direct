@@ -57,8 +57,8 @@ module UmlautBorrowDirect
         # If it's not locally available, remove highlight from 'holding' --
         # will remove highlights for checked out material for instance. 
         # And add in document_delivery, although future lines may remove it again
-        # if BD is available. 
-        if ! self.locally_available?(umlaut_request)
+        # if BD is available.
+        if sections.include?("holding") && ! self.locally_available?(umlaut_request)
           sections.delete("holding")
           sections << "document_delivery"
         end
