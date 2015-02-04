@@ -137,8 +137,11 @@ class BorrowDirectAdaptor < Service
       end
     end
 
-    url = BorrowDirect::GenerateQuery.new(@html_query_base_url).best_known_item_query_url_with(
-      :isbn   => request.referent.isbn,
+    # We used to try and include ISBN in our query too, as (ISBN OR (author AND title))
+    # But some BD z3950 endpoints can't handle this query (harvard apparently), and
+    # it's just generally touchier. We'll just use author/title, keeping things
+    # simple seems to the key to predictable BD results. 
+    url = BorrowDirect::GenerateQuery.new(@html_query_base_url).query_url_with(
       :title  => title,
       :author => get_search_creator(request.referent)
     )
