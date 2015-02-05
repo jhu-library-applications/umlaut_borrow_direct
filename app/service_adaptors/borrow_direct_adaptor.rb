@@ -9,7 +9,7 @@ class BorrowDirectAdaptor < Service
 
   required_config_params :library_symbol, :find_item_patron_barcode, :html_query_base_url
 
-  attr_accessor :library_symbol, :http_timeout
+  attr_accessor :library_symbol, :http_timeout, :use_bd_api
 
   def initialize(config)
     # testing shows truncating titles to 5 words results in fewer
@@ -30,6 +30,12 @@ class BorrowDirectAdaptor < Service
     # Abort for these rfr_id's -- keep from searching BD when
     # we came from BD. 
     @suppress_rfr_ids = ["info:sid/BD"]
+
+    # Should we use the api at all? Set to false to disable API
+    # entirely, because you think it performs too crappily or
+    # because it's not yet avail in production. 
+    @use_bd_api = true
+
     super
   end
 
@@ -113,8 +119,10 @@ class BorrowDirectAdaptor < Service
     UmlautBorrowDirect.locally_available? request
   end
 
-  # Right now, if and only if we have an ISBN
+  # Right now, if and only if we have an ISBN and the API is enabled. 
   def can_precheck_borrow_direct?(request)
+    return false unless @use_bd_api
+
     request.referent.isbn.present?
   end
 

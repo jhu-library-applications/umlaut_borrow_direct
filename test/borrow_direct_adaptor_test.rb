@@ -27,7 +27,7 @@ describe "BorrowDirectAdaptor" do
         }
       }
     }
-    
+
     @service = BorrowDirectAdaptor.new(@service_config.merge("service_id" => "test_bd"))
   end
 
@@ -79,6 +79,7 @@ describe "BorrowDirectAdaptor" do
       assert response.view_data["url"].start_with? @test_html_query_base_url
     end
   end
+
 
   describe "for local availability" do
     before do
@@ -232,6 +233,26 @@ describe "BorrowDirectAdaptor" do
       end
     end
 
+  end
+
+  describe "with API use disabled" do
+    # Should not need VCR, because if it's working properly we do not go out
+    # to the API. 
+    it "creates only a search link" do
+      @service = BorrowDirectAdaptor.new(
+        @service_config.merge("use_bd_api" => false, "service_id" => "test_bd")
+      )  
+
+      with_service_config(@service_config_list) do
+        request = fake_umlaut_request("/resolve?isbn=#{ENV['BD_REQUESTABLE_ISBN'] || '9789810743734'}")
+
+        @service.handle(request)
+
+        assert_dispatched request, "test_bd"
+
+        responses = assert_service_responses(request, "test_bd", :number => 1, :includes_type => :bd_link_to_search)
+      end
+    end
   end
 
 
