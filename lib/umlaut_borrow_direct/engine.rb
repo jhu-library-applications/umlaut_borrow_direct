@@ -12,6 +12,7 @@ module UmlautBorrowDirect
     config.http_submit_method = :get
 
     initializer "umlaut_borrow_direct.add_service_types" do |app|
+      require 'service_type_value'
       service_type_hash = Hash[UmlautBorrowDirect.service_type_values.collect {|v| [v, {}] }]
       ServiceTypeValue.merge_hash! service_type_hash
     end
