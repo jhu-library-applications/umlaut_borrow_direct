@@ -139,6 +139,7 @@ class BorrowDirectAdaptor < Service
   def make_link_to_search_response(request)
     title = get_search_title(request.referent)
 
+    # Limit to only first five words
     unless @limit_title_words.blank? || title.blank?
       if title.index(/((.+?[ ,.:\;]+){5})/)
         title = title.slice(0, $1.length).gsub(/[ ,.:\;]+$/, '')
