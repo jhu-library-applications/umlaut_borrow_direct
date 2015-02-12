@@ -137,22 +137,17 @@ class BorrowDirectAdaptor < Service
   end
 
   def make_link_to_search_response(request)
-    title = get_search_title(request.referent)
-
-    # Limit to only first five words
-    unless @limit_title_words.blank? || title.blank?
-      if title.index(/((.+?[ ,.:\;]+){5})/)
-        title = title.slice(0, $1.length).gsub(/[ ,.:\;]+$/, '')
-      end
-    end
-
     # We used to try and include ISBN in our query too, as (ISBN OR (author AND title))
     # But some BD z3950 endpoints can't handle this query (harvard apparently), and
     # it's just generally touchier. We'll just use author/title, keeping things
     # simple seems to the key to predictable BD results. 
-    url = BorrowDirect::GenerateQuery.new(@html_query_base_url).query_url_with(
+    title  = raw_search_title(request.referent)
+    author = get_search_creator(request.referent)
+
+    url = BorrowDirect::GenerateQuery.new(@html_query_base_url).normalized_author_title_query(
       :title  => title,
-      :author => get_search_creator(request.referent)
+      :author => author,
+      :max_title_words => @limit_title_words
     )
 
     request.add_service_response( 
