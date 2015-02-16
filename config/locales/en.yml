@@ -16,7 +16,7 @@ en:
     services:
       borrow_direct_adaptor:
         bd_link_to_search:
-          display_text: Check BorrowDirect for this item
+          display_text: Check BorrowDirect
           notes: ""
         bd_request_prompt:
           pickup_prompt: "Please select a pickup location"
