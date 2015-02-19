@@ -6,8 +6,7 @@ module UmlautBorrowDirect
   #     "https://example.org"   # => "Just URLs beginning https://example.org"
   #     "//example.org/some/path" # => At that host AND with that specific path
   #
-  #  Any combination of same.  The spec list defaults to Umlaut configuration
-  #  at UmlautController.umlaut_config.borrow_direct.redirect_whitelist
+  # Any list of same.  
   #
   # Then you can check:
   #     URLWhiteLister.new(array_of_specs).whitelisted?(url)
@@ -17,7 +16,7 @@ module UmlautBorrowDirect
   class UrlWhitelister
     attr_reader :whitelist_specs
 
-    def initialize(whitelist_specs = UmlautController.umlaut_config.fetch("borrow_direct.redirect_whitelist", []))
+    def initialize(whitelist_specs)
       @whitelist_specs = whitelist_specs
     end
 

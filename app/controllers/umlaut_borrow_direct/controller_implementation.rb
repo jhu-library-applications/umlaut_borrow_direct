@@ -1,3 +1,6 @@
+require 'uri'
+require 'umlaut_borrow_direct/url_whitelister'
+
 # Superclass for actual BorrowDirectController, which will usually
 # be implemented in local app, with an override of #current_user_barcode
 # that provides some local auth system to figure out current barcode
@@ -72,6 +75,16 @@ module UmlautBorrowDirect
             # In testing, we kinda wanna re-raise this guy
             raise e if defined?(VCR::Errors::UnhandledHTTPRequestError) && e.kind_of?(VCR::Errors::UnhandledHTTPRequestError)
           end
+        end
+      end
+
+      # If we've been requested to do so, redirect back to an external whitelisted service
+      if redirect_url = params["redirect"]
+        if UmlautBorrowDirect::UrlWhitelister.new(self.umlaut_config.lookup!("borrow_direct.redirect_whitelist", [])).whitelisted?(redirect_url)
+          redirect_to redirect_url
+          return
+        else
+          logger.warn("UmlautBorrowDirect Controller: Ignoring redirect URL which does not match whitelist: #{redirect_url}")
         end
       end
 
@@ -162,6 +175,8 @@ module UmlautBorrowDirect
       end
 
     end
+
+    
 
     def redirect_to_resolve_menu
       redirect_to url_for_with_co({:controller => "resolve", "umlaut.request_id" => @request.id}, @request.to_context_object), :status => 303

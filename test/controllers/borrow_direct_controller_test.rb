@@ -67,6 +67,39 @@ class BorrowDirectControllerTest < ActionController::TestCase
     @controller.instance_variable_get("@bg_thread").join
   end
 
+  test_with_cassette("redirects to whitelisted url", :controller) do
+    begin
+      request = submittable_request
+      request.add_service_response(
+        :service_type_value => :bd_request_prompt,
+        :service => ServiceStore.instantiate_service!("BorrowDirect", nil),
+        :pickup_locations => %w{one two three}
+      )
+
+      @controller.umlaut_config.borrow_direct ||= {}
+      @controller.umlaut_config.borrow_direct.redirect_whitelist = [
+          "//example.org"
+      ]
+
+      post :submit_request, :redirect => "http://example.org", :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "one"
+      assert_redirected_to "http://example.org"
+    ensure
+      @controller.umlaut_config.borrow_direct.delete(:redirect_whitelist)
+    end
+  end
+
+  test_with_cassette("refuses to redirect to non whitelisted url", :controller) do
+    request = submittable_request
+    request.add_service_response(
+      :service_type_value => :bd_request_prompt,
+      :service => ServiceStore.instantiate_service!("BorrowDirect", nil),
+      :pickup_locations => %w{one two three}
+    )
+
+    post :submit_request, :redirect => "http://example.org", :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "one"
+    assert_redirected_to %r(http://test.host/)
+  end
+
 
   def assert_failed_response(message, response_status = 303)
     assert_response response_status # redirect back to resolve menu usually
