@@ -45,4 +45,43 @@ http_interactions:
         Medical Library","Wilmer Friedenwald Library"]}}}'
     http_version: 
   recorded_at: Wed, 14 Jan 2015 21:00:33 GMT
+- request:
+    method: post
+    uri: https://bdtest.relais-host.com/dws/item/add
+    body:
+      encoding: UTF-8
+      string: ! '{"PartnershipId":"BD","AuthorizationId":"mbCmHcyJt61n6NQzjmfE3A6CyAo","PickupLocation":"one","ExactSearch":[{"Type":"ISBN","Value":"121212"}]}'
+    headers:
+      User-Agent:
+      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.6.0.1) https://github.com/jrochkind/borrow_direct
+      Accept:
+      - ! '*/*'
+      Date:
+      - Mon, 23 Feb 2015 18:13:08 GMT
+      Content-Type:
+      - application/json
+      Accept-Language:
+      - en
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1
+      Date:
+      - Mon, 23 Feb 2015 18:13:11 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: US-ASCII
+      string: ! '{"Request":{"RequestLink":{"ButtonLabel":"Request","ButtonLink":"http://findit.library.jhu.edu/resolve?genre=book&sid=Relais&title=In%20memoriam%20Luigi%20Nono%20-%20for%20piano%2C%201991&aufirst=Hans&aulast=Abrahamsen&isbn=9788759826126%20(sewn)&isbn=8759826126%20(sewn)&date=%5B2012%5D&pub=Edition%20Wilhelm%20Hansen&place=%5BCopenhagen%5D","RequestMessage":"Borrow
+        Direct cannot fill this request at this time.  Please request through Interlibrary
+        Loan."}}}'
+    http_version: 
+  recorded_at: Mon, 23 Feb 2015 18:13:11 GMT
 recorded_with: VCR 2.9.3
