@@ -161,9 +161,13 @@ in your logic if you want.
 ## Interactive API with the JQuery 
 
 You can use the [JQuery Content Utility](https://github.com/team-umlaut/umlaut/wiki/JQuery-Content-Utility)
-to place Umlaut content on another website. You can use this with BorrowDirect content as well,
-for instance to insert BD content on a Catalog page. (Not currently supported for
-multiple items on a catalog result page, but for a single item detail page).
+to place Umlaut content on another website. This works best with an item detail page showing
+one item -- you *may* be able to get it to work on a search results page in an "on demand" way
+where a click is needed to show Umlaut content. It will not work well trying to show for every
+item on a search results screen, as BD and other API's used by Umlaut are just too slow. 
+
+You can use this with BorrowDirect content as well, for instance to insert BD 
+content on a Catalog page. 
 
 If you are using the BD API, then the BorrowDirect content somtimes includes a submission form.
 With no extra configuration, if the user submits this form, they'll wind up at a standard
@@ -192,7 +196,32 @@ end
 
 ### Configure Javascript to add request to redirect
 
+The form delivered for BD has an empty hidden input that can
+contain a "redirect back to here" URL. 
+
+Right now this must be done somewhat manaully, in your JQuery Content
+Utility setup script, for example:
+
+~~~javascript
+      updater.add_section_target({ umlaut_section_id: "borrow_direct", 
+        selector:".on-my-local-page-somewhere",
+        before_update: function(html, count) {
+          // Add our redirect link to form
+          $(html).find("input.borrow-direct-form-redirect").attr("value", window.location.href)
+        }
+      });
+~~~
+
+### CSS on host page
+
+Umlaut content should show up more or less okay on your host page without
+custom CSS, especially if your host page uses Bootstrap(3) too. But you
+may want to provide some custom CSS to make it look more like it does in
+Umlaut. For instance, i use this:
+
 TODO
+
+
 
 ## Technical Details
 
