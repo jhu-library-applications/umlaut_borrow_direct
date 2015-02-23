@@ -88,6 +88,8 @@ class BorrowDirectControllerTest < ActionController::TestCase
     end
   end
 
+
+
   test_with_cassette("refuses to redirect to non whitelisted url", :controller) do
     request = submittable_request
     request.add_service_response(
@@ -97,7 +99,7 @@ class BorrowDirectControllerTest < ActionController::TestCase
     )
 
     post :submit_request, :redirect => "http://example.org", :service_id => "BorrowDirect", :request_id => request.id, :pickup_location => "one"
-    assert_redirected_to %r(http://test.host/)
+    assert_response 403
   end
 
 
