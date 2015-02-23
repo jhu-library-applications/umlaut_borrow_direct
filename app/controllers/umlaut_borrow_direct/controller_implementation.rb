@@ -84,7 +84,13 @@ module UmlautBorrowDirect
           redirect_to redirect_url
           return
         else
-          logger.warn("UmlautBorrowDirect Controller: Ignoring redirect URL which does not match whitelist: #{redirect_url}")
+          # We used to redirect to plain umlaut page on URL unallowed by whitelist,
+          # but that made debugging a confusing situation even harder. Just error
+          # message it. 
+          error_msg = "Error: UmlautBorrowDirect Controller: Ignoring redirect URL which does not match whitelist: #{redirect_url}"
+          logger.warn(error_msg)
+          render :status => 403, :text => error_msg
+          return
         end
       end
 
