@@ -47,7 +47,7 @@ describe "BorrowDirectAdaptor" do
 
       clauses = bd_query.split(" and ")
 
-      assert(clauses.any? {|c| c == 'au="Grimes"'}, "Includes author clause")
+      assert(clauses.any? {|c| c == 'au="grimes"'}, "Includes author clause")
       assert(clauses.any? {|c| c == 'ti="modern agriculture based on essentials"'}, "Includes title clause")
     end
   end
