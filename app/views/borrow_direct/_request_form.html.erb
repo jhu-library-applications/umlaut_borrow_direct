@@ -5,6 +5,11 @@
 
     <div class="form-group">
         <div class="col-sm-7 borrow-direct-pickup-col">
+            <%# hidden field empty, used for JQuery Content Utility, the JS consumer
+                may want to fill it in with a whitelisted redirect URL %>
+            <input class=".borrow-direct-form-redirect" type="hidden" name="redirect" value="" />
+
+
             <%= select_tag "pickup_location", options_for_select(response.view_data["pickup_locations"]),
                          :prompt => I18n.t("umlaut.services.borrow_direct_adaptor.bd_request_prompt.pickup_prompt", :default => "Please choose a delivery location"),
                          :class => "form-control" %>

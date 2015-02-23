@@ -158,6 +158,42 @@ end
 You can use the proc object in BorrowDirectAdaptor::DefaultLocalAvailabilityCheck
 in your logic if you want. 
 
+## Interactive API with the JQuery 
+
+You can use the [JQuery Content Utility](https://github.com/team-umlaut/umlaut/wiki/JQuery-Content-Utility)
+to place Umlaut content on another website. You can use this with BorrowDirect content as well,
+for instance to insert BD content on a Catalog page. (Not currently supported for
+multiple items on a catalog result page, but for a single item detail page).
+
+If you are using the BD API, then the BorrowDirect content somtimes includes a submission form.
+With no extra configuration, if the user submits this form, they'll wind up at a standard
+Umlaut menu after submission, rather than remaining on the (eg) Catalog page. 
+
+To enable redirection back to the host page, there are a few steps:
+
+### Configure a white list of hosts/URLs allowed to redirect back to
+
+
+~~~ruby
+# app/controllers/umlaut_controller.rb
+# ...
+umlaut_config.configure do 
+  borrow_direct do
+    redirect_whitelist = [
+      "//host.univ.edu",           # anything on this host
+      "https://host.univ.edu",     # This host, only https
+      "//host.univ.edu/path/some", # this specific path on this host
+      # You can use a leading "." to wildcard hosts
+      "//.example.org"             # any foo.example.org or example.org
+    ]
+  end
+end
+~~~
+
+### Configure Javascript to add request to redirect
+
+TODO
+
 ## Technical Details
 
 ### Custom ServiceTypeValue keys
