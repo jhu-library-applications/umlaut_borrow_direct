@@ -217,8 +217,11 @@ Utility setup script, for example:
 Umlaut content should show up more or less okay on your host page without
 custom CSS, especially if your host page uses Bootstrap(3) too. But you
 may want to provide some custom CSS to make it look more like it does in
+
 Umlaut. Sorry, we can't provide any particular examples at present, it
 may depend on your host styling. 
+
+
 
 ## Technical Details
 
