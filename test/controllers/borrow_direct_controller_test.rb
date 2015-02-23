@@ -88,6 +88,27 @@ class BorrowDirectControllerTest < ActionController::TestCase
     end
   end
 
+  test_with_cassette("redirects to whitelisted url on validation error", :controller) do
+    begin
+      request = submittable_request
+      request.add_service_response(
+        :service_type_value => :bd_request_prompt,
+        :service => ServiceStore.instantiate_service!("BorrowDirect", nil),
+        :pickup_locations => %w{one two three}
+      )
+
+      @controller.umlaut_config.borrow_direct ||= {}
+      @controller.umlaut_config.borrow_direct.redirect_whitelist = [
+          "//example.org"
+      ]
+
+      # intentionally don't include :pickup_location
+      post :submit_request, :redirect => "http://example.org", :service_id => "BorrowDirect", :request_id => request.id
+      assert_redirected_to "http://example.org"
+    ensure
+      @controller.umlaut_config.borrow_direct.delete(:redirect_whitelist)
+    end
+  end
 
 
   test_with_cassette("refuses to redirect to non whitelisted url", :controller) do

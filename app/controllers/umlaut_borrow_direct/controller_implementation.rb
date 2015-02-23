@@ -78,25 +78,7 @@ module UmlautBorrowDirect
         end
       end
 
-      # If we've been requested to do so, redirect back to an external whitelisted service
-      if redirect_url = params["redirect"]
-        if UmlautBorrowDirect::UrlWhitelister.new(self.umlaut_config.lookup!("borrow_direct.redirect_whitelist", [])).whitelisted?(redirect_url)
-          redirect_to redirect_url
-          return
-        else
-          # We used to redirect to plain umlaut page on URL unallowed by whitelist,
-          # but that made debugging a confusing situation even harder. Just error
-          # message it. 
-          error_msg = "Error: UmlautBorrowDirect Controller: Ignoring redirect URL which does not match whitelist: #{redirect_url}"
-          logger.warn(error_msg)
-          render :status => 403, :text => error_msg
-          return
-        end
-      end
-
-      # redirect back to /resolve menu, for same object, add explicit request_id
-      # in too. 
-      redirect_to_resolve_menu
+      redirect_back_to_source
     end
 
     protected
@@ -146,6 +128,30 @@ module UmlautBorrowDirect
       end
     end
 
+    # Redirects back to Umlaut menu, or to redirect URL if given and whitelisted,
+    # or in some cases displays a bad error for whitelist error. 
+    def redirect_back_to_source
+      # If we've been requested to do so, redirect back to an external whitelisted service
+      if redirect_url = params["redirect"]
+        if UmlautBorrowDirect::UrlWhitelister.new(self.umlaut_config.lookup!("borrow_direct.redirect_whitelist", [])).whitelisted?(redirect_url)
+          redirect_to redirect_url
+          return
+        else
+          # We used to redirect to plain umlaut page on URL unallowed by whitelist,
+          # but that made debugging a confusing situation even harder. Just error
+          # message it. 
+          error_msg = "Error: UmlautBorrowDirect Controller: Ignoring redirect URL which does not match whitelist: #{redirect_url}"
+          logger.warn(error_msg)
+          render :status => 403, :text => error_msg
+          return
+        end
+      end
+
+      # redirect back to /resolve menu, for same object, add explicit request_id
+      # in too. 
+      redirect_to_resolve_menu
+    end
+
     # error_type defaults to Error, but can also be ValidationError
     def register_error(msg, error_type = Error)
       if error_type == Error
@@ -161,7 +167,7 @@ module UmlautBorrowDirect
 
       # Redirect back to menu page
       if @request
-        redirect_to_resolve_menu
+        redirect_back_to_source
       else
         render :status => 400, :text => msg
       end
