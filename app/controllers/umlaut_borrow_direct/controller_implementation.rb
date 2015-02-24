@@ -132,7 +132,7 @@ module UmlautBorrowDirect
     # or in some cases displays a bad error for whitelist error. 
     def redirect_back_to_source
       # If we've been requested to do so, redirect back to an external whitelisted service
-      if redirect_url = params["redirect"]
+      if redirect_url = params["redirect"] && redirect_url.present?
         if UmlautBorrowDirect::UrlWhitelister.new(self.umlaut_config.lookup!("borrow_direct.redirect_whitelist", [])).whitelisted?(redirect_url)
           redirect_to redirect_url
           return
