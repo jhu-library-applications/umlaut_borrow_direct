@@ -30,8 +30,16 @@
 <% end %>
 
 <% if bd_presenter.show_not_available?  %>
-    <%# display custom because we have no URL, and the standard thing insists on a link %>
-    <p class="bd-api-unavailable"><%= bd_presenter.not_available_response.view_data["display_text"] %></p>
+    <p class="bd-api-unavailable">        
+        <%= t('umlaut.services.borrow_direct_adaptor.bd_not_available.display_text') %>
+        <% if bd_presenter.link_response %>
+            <%= link_to t('umlaut.services.borrow_direct_adaptor.bd_not_available.workaround_link'), 
+                    link_router_url(bd_presenter.link_response),
+                    :class => "bd-direct-link" %>
+        <% end %>
+    </p>
+
+
 <% end %>
 
 <%# we do custom spinner, so we can customize label for 'placing request' %>
@@ -56,9 +64,12 @@ if errors.present?
 
         <%= content_tag "div", :class => bd_presenter.error_div_classes, :role=> "alert" do %>
             <p> <%= t(bd_presenter.error_message_i18n_key) %>
-                <% if bd_presenter.show_link_response? %>
-                    <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
-                <% end %>
+                
+                <% if bd_presenter.link_response %>
+                    <%= link_to t('umlaut.display_sections.borrow_direct.workaround_link'), 
+                            link_router_url(bd_presenter.link_response),
+                            :class => "bd-direct-link" %>
+                <% end %>                
             </p>
 
             <% if bd_presenter.user_reportable_error %>
