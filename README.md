@@ -6,7 +6,7 @@ IN PROGRESS
 
 ## UI Overview
 
-At first, we planned to mainly focus on what the [BorrowDirect web service API's] could provide to a UI. 
+At first, we planned to mainly focus on what the [BorrowDirect web service API's](http://borrowdirect.pbworks.com/w/page/83351110/Web%20Services%20Documentation) could provide to a UI. 
 
 While the API's are still used by this plugin, taking substantial code to accoplish, disabled), several factors resulted in the UI being a bit more centered around a direct link to author/title keyword search results in the standard BD interface instead. (Also, all use of the API's can be disabled if desired):
 
@@ -28,7 +28,7 @@ You will get confirmation on page after submitting:
 ![image](./doc/images/umlaut-bd-confirmation.png)
 
 Or if the API said not available, we'll suggest other editions might be and you might want to check:
-![image](./doc/images/umlaut-bd-confirmation.png)
+![image](./doc/images/umlaut-bd-not-available.png)
 
 (If BD API times out or errors, similar to above). 
 
