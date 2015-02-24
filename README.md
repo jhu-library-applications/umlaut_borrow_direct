@@ -4,6 +4,35 @@ IN PROGRESS
 
 [![Build Status](https://travis-ci.org/jrochkind/umlaut_borrow_direct.svg)](https://travis-ci.org/jrochkind/umlaut_borrow_direct)
 
+## UI Overview
+
+At first, we planned to mainly focus on what the [BorrowDirect web service API's] could provide to a UI. 
+
+While the API's are still used by this plugin, taking substantial code to accoplish, disabled), several factors resulted in the UI being a bit more centered around a direct link to author/title keyword search results in the standard BD interface instead. (Also, all use of the API's can be disabled if desired):
+
+* BD API's are exclusively based on ISBN (at this time anyway) . So if we don't have an ISBN, we can't use them, and can only send user to standard BD interface. Even if we do have an ISBN, we can only get availability for that specific ISBN/edition, and in user testing and feedback we found users feel misled if we tell them "not in BD" when another equally good edition is available in BD. 
+* BD reliability issues. Unreliable performance, generally slower than our users might want, and unpredictable error messages and results. In cases of a timeout or other error, we can do nothing but direct users to standard BD interface. And some users in testing preferred going right to standard BD interface rather than wait for API. 
+
+The interface we ended up with is based on multiple iterations including user testing and staff feedback, but it is a compromise interface. It's possible you will want something different for your context -- please let us know, and we can probably make this plugin configurable to your needs if it is not already. 
+
+A citation with no ISBN just shows link to standard BD interface:
+![image](./doc/images/umlaut-bd-just-search.png)
+
+For a citation with an ISBN, we will consult the BD API in the background (unless use_bd_api=false configured):
+![image](./doc/images/umlaut-bd-progress.png)
+
+If the API says available, you get a request form right on page:
+![image](./doc/images/umlaut-bd-available.png)
+
+You will get confirmation on page after submitting:
+![image](./doc/images/umlaut-bd-confirmation.png)
+
+Or if the API said not available, we'll suggest other editions might be and you might want to check:
+![image](./doc/images/umlaut-bd-confirmation.png)
+
+(If BD API times out or errors, similar to above). 
+
+
 ## Installation
 
 You have an Umlaut app already (Umlaut 4.1+ required)
@@ -23,13 +52,18 @@ gem 'umlaut_borrow_direct'
       library_symbol: YOURSYMBOL
       find_item_patron_barcode: a_generic_barcode_that_can_be_used_for_FindItem_lookups
       html_query_base_url: https://example.edu/borrow_direct
-      # optionally log all BD API calls for analysis
+      #
+      # Optional params
+      # disable BD api entirely:
+      use_bd_api: false
+      # Set timeout for BD api in seconds (default 20 seconds)
+      http_timeout: 10
+      # log all BD API calls for analysis
       bd_api_log_level: info
-
 ~~~
 
-If you want to take account of local availability (TBD), you want a priority
-level after your local holdings lookup service. 
+If you want to take account of local availability, you want to use a priority
+level later than your local holdings lookup service. 
 
 html_query_base_url is the URL for a local script that does auth and redirect to BD.
 Your local script needs to pass on the `query` query param too. (Have different
@@ -50,6 +84,8 @@ add_section_highlights_filter!  UmlautBorrowDirect.section_highlights_filter
 ~~~
 
 ### Add a local controller
+
+(Not needed if `use_bd_api` set to `false`)
 
 Placing a request with BorrowDirect requires the current user's barcode. But Umlaut 
 has no login system at all, and even if it did it wouldn't know how to figure out 
