@@ -105,4 +105,20 @@ class BorrowDirectPresenter
     self.status_response.view_data[:error_user_message]
   end
 
+  def error_div_classes
+    classes = ["borrow-direct-error"]
+    if self.could_not_place_request?
+      classes.concat ["alert", "alert-danger"]
+    end
+    return classes
+  end
+
+  def error_message_i18n_key
+    if self.could_not_place_request?
+      'umlaut.services.borrow_direct_adaptor.bd_request_status.error'
+    else
+      'umlaut.display_sections.borrow_direct.error'
+    end
+  end
+
 end

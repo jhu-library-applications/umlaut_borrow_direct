@@ -49,33 +49,21 @@ errors = umlaut_request.
     find_all {|ds| ds.failed? }
 if errors.present? 
     %>
-    <% if bd_presenter.could_not_place_request? %>
-        <div class="borrow-direct-error alert alert-danger" role="alert">
-            <p>
-                <%= t('umlaut.services.borrow_direct_adaptor.bd_request_status.error') %>
-                <% if bd_presenter.show_link_response? %>
-                    <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
-                <% end %>
-            </p>
-            <% if bd_presenter.user_reportable_error %>
-                <p><%= bd_presenter.user_reportable_error %></p>
-            <% end %>
-        </div>
 
-    <% else %>
         <% if bd_presenter.show_link_response? %>
             <hr>
-        <% end %>        
+        <% end %>  
 
-        <div class="borrow-direct-error" role="alert">
-            <p> <%= t('umlaut.display_sections.borrow_direct.error') %>
+        <%= content_tag "div", :class => bd_presenter.error_div_classes, :role=> "alert" do %>
+            <p> <%= t(bd_presenter.error_message_i18n_key) %>
                 <% if bd_presenter.show_link_response? %>
                     <%= t('umlaut.display_sections.borrow_direct.error_workaround') %>
                 <% end %>
             </p>
+
             <% if bd_presenter.user_reportable_error %>
                 <p><%= bd_presenter.user_reportable_error %></p>
             <% end %>
-        </div>
-    <% end %>
+        <% end %>
+
 <% end %>
