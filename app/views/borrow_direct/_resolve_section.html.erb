@@ -35,7 +35,8 @@
         <% if bd_presenter.link_response %>
             <%= link_to t('umlaut.services.borrow_direct_adaptor.bd_not_available.workaround_link'), 
                     link_router_url(bd_presenter.link_response),
-                    :class => "bd-direct-link" %>
+                    :class => "bd-direct-link",
+                    :target => "_blank" %>
         <% end %>
     </p>
 
@@ -68,7 +69,8 @@ if errors.present?
                 <% if bd_presenter.link_response %>
                     <%= link_to t('umlaut.display_sections.borrow_direct.workaround_link'), 
                             link_router_url(bd_presenter.link_response),
-                            :class => "bd-direct-link" %>
+                            :class => "bd-direct-link",
+                            :target => "_blank" %>
                 <% end %>                
             </p>
 
