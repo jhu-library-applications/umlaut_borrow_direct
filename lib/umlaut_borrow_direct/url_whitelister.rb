@@ -54,7 +54,7 @@ module UmlautBorrowDirect
       spec_host = parsed_spec.host
 
       if spec_host && spec_host.start_with?(".")
-        return false unless (parsed_url.host.ends_with?(spec_host) || parsed_url.host == spec_host.slice(1..-1))
+        return false unless (parsed_url.host && parsed_url.host.ends_with?(spec_host) || parsed_url.host == spec_host.slice(1..-1))
       elsif spec_host && (! spec_host.empty?)
         # just check it normally below
         part_list << :host
