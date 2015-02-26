@@ -1,6 +1,6 @@
 # UmlautBorrowDirect
 
-IN PROGRESS
+[![Gem Version](https://badge.fury.io/rb/umlaut_borrow_direct.svg)](http://badge.fury.io/rb/umlaut_borrow_direct)
 
 [![Build Status](https://travis-ci.org/jrochkind/umlaut_borrow_direct.svg)](https://travis-ci.org/jrochkind/umlaut_borrow_direct)
 
