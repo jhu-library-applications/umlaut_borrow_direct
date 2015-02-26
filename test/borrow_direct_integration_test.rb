@@ -66,7 +66,9 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
       assert_borrow_direct_section do
         assert_select(".bd-api-unavailable", 
           :text => Regexp.new(Regexp.escape(I18n.translate("umlaut.services.borrow_direct_adaptor.bd_not_available.display_text")))) do
-            assert_select "a.bd-direct-link[href=?]", /.*link_router.*/
+            assert_select "a.bd-direct-link", 1 do |elements|
+              elements.first["href"] =~ /link_router/
+            end
         end
       end
     end
@@ -114,7 +116,9 @@ class BorrowDirectIntegrationTest < ActionDispatch::IntegrationTest
         assert_borrow_direct_section do |el|          
           # the error message, with link
           assert_select ".borrow-direct-error" do
-            assert_select "a.bd-direct-link[href=?]", /.*link_router.*/
+            assert_select "a.bd-direct-link", 1 do |elements|
+              elements.first["href"] =~ /link_router/
+            end
           end
           # the link
           assert_select "a.response_link[href]", :text => I18n.translate("umlaut.services.borrow_direct_adaptor.bd_link_to_search.display_text")
