@@ -2,6 +2,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/umlaut_borrow_direct.svg)](http://badge.fury.io/rb/umlaut_borrow_direct) [![Build Status](https://travis-ci.org/jrochkind/umlaut_borrow_direct.svg)](https://travis-ci.org/jrochkind/umlaut_borrow_direct)
 
+A plugin to the open source [Umlaut](https://github.com/team-umlaut/umlaut) link resolver, to provide linking and API support for the consortial [BorrowDirect](http://www.borrowdirect.org/) service. 
+
 ## UI Overview
 
 At first, we planned to mainly focus on what the [BorrowDirect web service API's](http://borrowdirect.pbworks.com/w/page/83351110/Web%20Services%20Documentation) could provide to a UI. 
