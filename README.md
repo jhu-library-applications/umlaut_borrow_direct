@@ -6,7 +6,7 @@
 
 At first, we planned to mainly focus on what the [BorrowDirect web service API's](http://borrowdirect.pbworks.com/w/page/83351110/Web%20Services%20Documentation) could provide to a UI. 
 
-While the API's can still used by this plugin (or can be optionally disabled), several factors resulted in the UI being a bit more centered around a direct link to author/title keyword search results in the standard BD interface instead. (Also, all use of the API's can be disabled if desired):
+While the API's can still used by this plugin (or can be optionally disabled), several factors resulted in the UI being a bit more centered around a direct link to author/title keyword search results in the standard BD interface instead:
 
 * BD API's are exclusively based on ISBN (at this time anyway) . So if we don't have an ISBN, we can't use them, and can only send user to standard BD interface. Even if we do have an ISBN, we can only get availability for that specific ISBN/edition, and in user testing and feedback we found users feel misled if we tell them "not in BD" when another equally good edition is available in BD. 
 * BD reliability issues. Unreliable performance, generally slower than our users might want, and unpredictable error messages and results. In cases of a timeout or other error, we can do nothing but direct users to standard BD interface. And some users in testing preferred going right to standard BD interface rather than wait for API. 
