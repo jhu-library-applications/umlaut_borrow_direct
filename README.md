@@ -69,7 +69,10 @@ html_query_base_url is the URL for a local script that does auth and redirect to
 Your local script needs to pass on the `query` query param too. (Have different
 integration needs? Let us know)
 
-TODO: Pointing at production vs dev borrowdirect. Right now it's always dev. 
+If your app launches with Rails environment `production`, we set the `BorrowDirect::Defaults.api_base`
+to BD production endpoint, otherwise to BD test environment endpoint. If you need
+different behavior, you should be able to set `BorrowDirect::Defaults.api_base` in your own
+initializer, let us know if it doesn't work out for you. 
 
 ### Configure display of BorrowDirect responses
 

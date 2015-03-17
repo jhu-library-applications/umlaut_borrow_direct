@@ -27,5 +27,15 @@ module UmlautBorrowDirect
       end
     end
 
+  initializer "umlaut_borrow_direct.set_api_base" do 
+    # We just set the default api_base in production, hopefully
+    # that won't cause any problems, local app could do something different
+    # in it's own initializer I think. 
+    if Rails.env.production?
+      require 'borrow_direct'
+      BorrowDirect::Defaults.api_base = BorrowDirect::Defaults::PRODUCTION_API_BASE
+    end
+  end
+
   end
 end
