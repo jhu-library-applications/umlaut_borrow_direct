@@ -27,6 +27,11 @@
         </p>
     <% end %>
     <%= render "borrow_direct/request_form", :response => bd_presenter.request_prompt_response %>
+    <% if bd_presenter.link_response && ! bd_presenter.show_link_response? %>
+        <%= link_to t('umlaut.services.borrow_direct_adaptor.bd_request_prompt.direct_link'), 
+            :class => "bd-direct-link",
+            :target => "_blank" %>
+    <% end %>
 <% end %>
 
 <% if bd_presenter.show_not_available?  %>

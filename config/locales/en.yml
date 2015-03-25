@@ -23,6 +23,7 @@ en:
           request: Request
           pickup_validation: "You must choose a pickup location"
           progress: "Checking BorrowDirect availability for you"
+          direct_link: "You can also check BorrowDirect for other editions."
         bd_not_available:
           display_text: "This edition is not available via BorrowDirect."
           workaround_link: "You can check BorrowDirect for other editions."

@@ -15,6 +15,8 @@ While the API's can still used by this plugin (or can be optionally disabled), s
 
 The interface we ended up with is based on multiple iterations including user testing and staff feedback, but it is a compromise interface. It's possible you will want something different for your context -- please let us know, and we can probably make this plugin configurable to your needs if it is not already. 
 
+(These screenshots are out of date at the moment, the UI has been tweaked)
+
 A citation with no ISBN just shows link to standard BD interface:
 ![image](./doc/images/umlaut-bd-just-search.png)
 

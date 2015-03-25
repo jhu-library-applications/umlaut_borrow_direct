@@ -81,7 +81,7 @@ class BorrowDirectPresenter
   end
 
   def show_link_response?
-    self.link_response && ! self.show_confirmation?
+    self.link_response && (! self.show_confirmation?) && (! self.show_request_form?)
   end
 
   def could_not_place_request?
