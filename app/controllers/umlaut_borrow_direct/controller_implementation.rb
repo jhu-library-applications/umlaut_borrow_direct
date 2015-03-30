@@ -44,6 +44,7 @@ module UmlautBorrowDirect
       # Saving the @bg_thread only so in testing we can wait on it. 
       @bg_thread = Thread.new(@request, @service, @request.referent.isbn) do |request, service, isbn|
         begin
+          ActiveRecord::Base.forbid_implicit_checkout_for_thread!
 
           requester = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol)
           requester.timeout = @service.http_timeout
@@ -56,7 +57,13 @@ module UmlautBorrowDirect
             set_status_response({:status => Successful, :request_number => request_number }, request)
           end
 
-        rescue StandardError => e          
+        rescue StandardError => e
+          # If it was an AR error in the first place, forget trying to record
+          # it. 
+          if e.kind_of?(ActiveRecord::ActiveRecordError)
+            raise e
+          end
+
           ActiveRecord::Base.connection_pool.with_connection do
             Rails.logger.error("BorrowDirect: Error placing request:  #{e.class} #{e.message}. Backtrace:\n  #{Umlaut::Util.clean_backtrace(e).join("\n  ")}\n")
 
@@ -68,7 +75,7 @@ module UmlautBorrowDirect
             set_status_response(status_response_data, request)
 
             if service
-              service.bd_api_log(isbn, "RequestItem", e, requester.last_request_time)
+              service.bd_api_log(isbn, "RequestItem", e, (requester.last_request_time if requester))
             end
 
 
