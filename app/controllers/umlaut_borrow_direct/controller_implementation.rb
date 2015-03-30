@@ -61,6 +61,10 @@ module UmlautBorrowDirect
           # If it was an AR error in the first place, forget trying to record
           # it. 
           if e.kind_of?(ActiveRecord::ActiveRecordError)
+            Rails.logger.fatal("BorrowDirect: Error placing request, and we could not log to database (#{e}):  #{e.class} #{e.message}. Backtrace:\n  #{Umlaut::Util.clean_backtrace(e).join("\n  ")}\n")
+
+            # Nothing will do anything with this since we aren't waiting on
+            # the thread, but oh well. 
             raise e
           end
 
