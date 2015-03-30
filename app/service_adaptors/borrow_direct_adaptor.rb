@@ -129,6 +129,9 @@ class BorrowDirectAdaptor < Service
   def bd_api_log(isbn, action, result, timing)
     if result.kind_of? Exception
       result = "#{result.class}/#{result.message}"
+      if result.respond_to?(:bd_code) && result.bd_code.present?
+        result += "/#{result.bd_code}"
+      end
     end
 
     if @bd_api_log_level
