@@ -262,6 +262,29 @@ may want to provide some custom CSS to make it look more like it does in
 Umlaut. Sorry, we can't provide any particular examples at present, it
 may depend on your host styling. 
 
+## Logging BorrowDirect API responses
+
+The BorrowDirect API has been inconsistent in it's realiability and performance,
+you may want to log API calls to keep an eye on it. 
+
+To turn on API logging, in the umlaut_services.yml configuration for the adaptor,
+set the `bd_api_log_level` to a Logger log level, such as "info" or "warn".  BD
+API calls, FindItem and RequestItem, will be logged to the standard Rails application
+log. 
+
+Each log line begins with `BD API log`, then has a tab-separated array of 
+values on the API action, success or exception result, timing, and query. 
+
+A Rake task is built in to extract these lines from a Rails log file, and
+provide some descriptive statistics of API calls.  From your application, run:
+
+    bundle exec rake umlaut_borrow_direct:api_stats[path/to/log/production.log]
+
+You can also have the rake task read from stdin, which can be useful for
+piping a stream to it, for instance from a remote log file retrieved via
+an ssh connection:
+
+    ssh host.example.com 'cat /path/to/app/logs/production.log' | bundle exec rake umlaut_borrow_direct:api_stats[stdin]
 
 
 ## Technical Details
