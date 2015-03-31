@@ -47,6 +47,11 @@ class BorrowDirectAdaptor < Service
     return ! title_is_serial?(request.referent)
   end
 
+  # Make sure there are no hyphens, BD doesn't seem to like it
+  def isbn(request)
+    request.referent.isbn && request.referent.isbn.gsub('-', '')
+  end
+
   def handle(request)
     if request.referrer_id && @suppress_rfr_ids.include?(request.referrer_id)
       return request.dispatched(self, true)
@@ -70,10 +75,10 @@ class BorrowDirectAdaptor < Service
       begin
         finditem = BorrowDirect::FindItem.new(@find_item_patron_barcode, @library_symbol)
         finditem.timeout = @http_timeout
-        response = finditem.find(:isbn => request.referent.isbn)
+        response = finditem.find(:isbn => isbn(request))
 
         # Log success if configured, used for looking at error rate
-        bd_api_log(request.referent.isbn, "FindItem", "SUCCESS", finditem.last_request_time)
+        bd_api_log(isbn(request), "FindItem", "SUCCESS", finditem.last_request_time)
 
         if response.requestable?
           # Mark it requestable!
@@ -100,7 +105,7 @@ class BorrowDirectAdaptor < Service
         Rails.logger.error(msg)
 
         # Special BD error log if configured
-        bd_api_log(request.referent.isbn, "FindItem", e, finditem.last_request_time)
+        bd_api_log(isbn(request), "FindItem", e, finditem.last_request_time)
 
         # And mark it as an error so error message will be displayed. Let's
         # mark it a temporary error, so it'll be tried again later, it might
@@ -123,7 +128,7 @@ class BorrowDirectAdaptor < Service
   def can_precheck_borrow_direct?(request)
     return false unless @use_bd_api
 
-    request.referent.isbn.present?
+    isbn(request).present?
   end
 
   def bd_api_log(isbn, action, result, timing)
