@@ -29,7 +29,7 @@ class BorrowDirectAdaptor < Service
     @bd_api_logger_level = nil
     # Abort for these rfr_id's -- keep from searching BD when
     # we came from BD. 
-    @suppress_rfr_ids = ["info:sid/BD"]
+    @suppress_rfr_ids = ["info:sid/BD", "info:sid/BD-Unfilled"]
 
     # Should we use the api at all? Set to false to disable API
     # entirely, because you think it performs too crappily or
