@@ -48,7 +48,11 @@ module UmlautBorrowDirect
 
           requester = BorrowDirect::RequestItem.new(self.patron_barcode, service.library_symbol)
           requester.timeout = @service.http_timeout
-          request_number = requester.make_request!(params[:pickup_location], :isbn => isbn)
+
+          # remove hyphens, BD likes it better. 
+          normalized_isbn = isbn.gsub('-', '') if isbn
+
+          request_number = requester.make_request!(params[:pickup_location], :isbn => normalized_isbn)
 
           ActiveRecord::Base.connection_pool.with_connection do
             service.bd_api_log(isbn, "RequestItem", "SUCCESS", requester.last_request_time)
