@@ -23,5 +23,3 @@ group "test" do
 end
 
 
-# To use debugger
- gem 'debugger'
