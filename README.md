@@ -86,6 +86,9 @@ In your local `./app/controllers/umlaut_controller.rb`, in the
 resolve_sections.insert_section UmlautBorrowDirect.resolve_section_definition, :before => "holding"
 # Supplies logic for when to highlight borrow_direct section
 add_section_highlights_filter!  UmlautBorrowDirect.section_highlights_filter
+# If you don't like the default highlighting logic, you can replace this
+# with your own, or add another section_highlights_filter afterwards in the
+# chain to fine-tune it. 
 ~~~
 
 ### Add a local controller

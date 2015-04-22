@@ -9,6 +9,20 @@ module UmlautBorrowDirect
     end.present?
   end
 
+  # A custom lambda for visibility of our section. 
+  # We want it to be visible if the service is still in progress,
+  # or if it's finished with ServiceResponses generated, OR
+  # if it's finished in an error state. 
+  # Another way to say this, the section will NOT be visible when
+  # the service has finished, without generating responses, or errors. 
+  #
+  # Oh, and don't show it at all unless citation does not pass
+  # MetadataHelper.title_is_serial?. If we don't think it's a serial,
+  # it's not appropriate for BD and no results will be shown, don't show
+  # spinner either. 
+  #
+  # We took the Umlaut SectionRenderer visibility logic for :in_progress,
+  # and added a condition for error state
   SectionVisibilityLogic = proc do |section_renderer|
       (! MetadataHelper.title_is_serial?(section_renderer.request.referent)) &&
       (
@@ -22,20 +36,6 @@ module UmlautBorrowDirect
 
 
   def self.resolve_section_definition
-    # A custom lambda for visibility of our section. 
-    # We want it to be visible if the service is still in progress,
-    # or if it's finished with ServiceResponses generated, OR
-    # if it's finished in an error state. 
-    # Another way to say this, the section will NOT be visible when
-    # the service has finished, without generating responses, or errors. 
-    #
-    # Oh, and don't show it at all unless citation does not pass
-    # MetadataHelper.title_is_serial?. If we don't think it's a serial,
-    # it's not appropriate for BD and no results will be shown, don't show
-    # spinner either. 
-    #
-    # We took the Umlaut SectionRenderer visibility logic for :in_progress,
-    # and added a condition for error state
     {
       :div_id     => "borrow_direct",
       :html_area  => :main,
@@ -64,14 +64,12 @@ module UmlautBorrowDirect
         end
 
 
+        # highlight BD section and NOT document_delivery if BD section is present
         if ( umlaut_request.get_service_type("bd_link_to_search").present? || 
              umlaut_request.get_service_type("bd_request_prompt").present? )
-          # highlight BD section and NOT document_delivery if BD section is present
           sections.delete("document_delivery")
           sections << "borrow_direct"          
         end
-
-
 
 
         # If request is in progress or succesful, highlight it and not docdel. 
