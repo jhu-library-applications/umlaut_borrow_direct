@@ -1,6 +1,6 @@
 # UmlautBorrowDirect
 
-[![Gem Version](https://badge.fury.io/rb/umlaut_borrow_direct.svg)](http://badge.fury.io/rb/umlaut_borrow_direct) [![Build Status](https://travis-ci.org/team-umlaut/umlaut_borrow_direct.svg)](https://travis-ci.org/jrochkind/umlaut_borrow_direct)
+[![Gem Version](https://badge.fury.io/rb/umlaut_borrow_direct.svg)](http://badge.fury.io/rb/umlaut_borrow_direct) [![Build Status](https://travis-ci.org/team-umlaut/umlaut_borrow_direct.svg)](https://travis-ci.org/team-umlaut/umlaut_borrow_direct)
 
 A plugin to the open source [Umlaut](https://github.com/team-umlaut/umlaut) link resolver, to provide linking and API support for the consortial [BorrowDirect](http://www.borrowdirect.org/) service. 
 
