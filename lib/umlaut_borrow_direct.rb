@@ -25,6 +25,10 @@ module UmlautBorrowDirect
   # and added a condition for error state
   SectionVisibilityLogic = proc do |section_renderer|
       (! MetadataHelper.title_is_serial?(section_renderer.request.referent)) &&
+        # IF we believe it's locally available, the adaptor is going to bail
+        # anyway, but there can be a lag time waiting for it, let's recognize
+        # and hide our section. 
+      (! UmlautBorrowDirect.locally_available? section_renderer.request) &&
       (
         (! section_renderer.responses_empty?) || 
         section_renderer.services_in_progress? ||
