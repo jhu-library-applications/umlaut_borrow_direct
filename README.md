@@ -100,7 +100,7 @@ has no login system at all, and even if it did it wouldn't know how to figure ou
 the current user's barcode in your local system. 
 
 The solution at present is that you need to provide a BorrowDirectController
-in your local app, that implements a #current_patron_barcode method that returns
+in your local app, that implements a #patron_barcode method that returns
 the current user's barcode. It's also up to you to implement some kind of auth/login
 system to enforce/determine the current user, which you can do in this controller,
 or elsewhere. 
