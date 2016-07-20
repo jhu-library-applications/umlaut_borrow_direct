@@ -8,7 +8,7 @@ module UmlautBorrowDirect
     # Post is definitely more appropriate, but doens't work with
     # Shibboleth (and maybe other SSO) protection. Bah. We make
     # it a config variable, if :post doesn't conflict with your infrastructure,
-    # you could try it. 
+    # you could try it.
     config.http_submit_method = :get
 
     initializer "umlaut_borrow_direct.add_service_types" do |app|
@@ -22,15 +22,13 @@ module UmlautBorrowDirect
     end
 
     initializer "umlaut_borrow_direct.routing" do
-      Rails.application.routes.draw do
-        Umlaut::Routes.register_routes( UmlautBorrowDirect::RouteSet )
-      end
+      Umlaut::Routes.register_routes( UmlautBorrowDirect::RouteSet )
     end
 
-  initializer "umlaut_borrow_direct.set_api_base" do 
+  initializer "umlaut_borrow_direct.set_api_base" do
     # We just set the default api_base in production, hopefully
     # that won't cause any problems, local app could do something different
-    # in it's own initializer I think. 
+    # in it's own initializer I think.
     if Rails.env.production?
       require 'borrow_direct'
       BorrowDirect::Defaults.api_base = BorrowDirect::Defaults::PRODUCTION_API_BASE
