@@ -2,17 +2,17 @@
 http_interactions:
 - request:
     method: post
-    uri: https://bdtest.relais-host.com/portal-service/user/authentication/patron
+    uri: https://bdtest.relais-host.com/portal-service/user/authentication
     body:
       encoding: UTF-8
-      string: ! '{"AuthenticationInformation":{"LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}}'
+      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
     headers:
       User-Agent:
-      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
+      - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
-      - ! '*/*'
+      - "*/*"
       Date:
-      - Wed, 14 Jan 2015 20:59:54 GMT
+      - Tue, 23 Aug 2016 19:15:31 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,45 +25,44 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Wed, 14 Jan 2015 21:00:10 GMT
+      - Tue, 23 Aug 2016 19:15:32 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
-      - '494'
+      - '223'
       Connection:
       - keep-alive
     body:
-      encoding: US-ASCII
-      string: ! '{"Authentication":{"AuthnUserInfo":{"AId":"2aTwfSTGu1NoVrRrk32w9blGdp0","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","UserLogin":"DUMMY_BD_PATRON","FirstName":"Jonathan","LastName":"Rochkind","AllowLoanAddRequest":true,"AllowCopyAddRequest":false,"AllowSelDelivLoanChange":true,"AllowSelDelivCopyChange":false,"ILSProfile":{"EmailAddress":"jonathan@dnil.net","Telephone":"4105168886","AddressInformation":{"Address1":"Library
-        Systems","Address2":"MSE Library\r\nHomewood Campus"}}}}}'
+      encoding: UTF-8
+      string: '{"AuthorizationId":"HZ6Ujqd77M7bCUQReIYWu0IZ0mg","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
     http_version: 
-  recorded_at: Wed, 14 Jan 2015 21:00:10 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:32 GMT
 - request:
     method: post
-    uri: https://bdtest.relais-host.com/dws/item/add
+    uri: https://bdtest.relais-host.com/dws/item/add?aid=HZ6Ujqd77M7bCUQReIYWu0IZ0mg
     body:
       encoding: UTF-8
-      string: ! '{"PartnershipId":"BD","AuthorizationId":"2aTwfSTGu1NoVrRrk32w9blGdp0","PickupLocation":"one","ExactSearch":[{"Type":"ISBN","Value":"121212"}]}'
+      string: '{"PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","ExactSearch":[{"Type":"ISBN","Value":"121212"}],"PickupLocation":"one"}'
     headers:
       User-Agent:
-      - ruby borrow_direct gem 0.9.1 (HTTPClient 2.5.3.2) https://github.com/jrochkind/borrow_direct
+      - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
-      - ! '*/*'
+      - "*/*"
       Date:
-      - Wed, 14 Jan 2015 21:00:10 GMT
+      - Tue, 23 Aug 2016 19:15:32 GMT
       Content-Type:
       - application/json
       Accept-Language:
       - en
   response:
     status:
-      code: 200
-      message: OK
+      code: 404
+      message: Not Found
     headers:
       Server:
       - nginx/1.4.1
       Date:
-      - Wed, 14 Jan 2015 21:00:13 GMT
+      - Tue, 23 Aug 2016 19:15:35 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -71,10 +70,8 @@ http_interactions:
       Connection:
       - keep-alive
     body:
-      encoding: US-ASCII
-      string: ! '{"Request":{"RequestLink":{"ButtonLabel":"Request","ButtonLink":"http://findit.library.jhu.edu/resolve?genre=book&sid=Relais&title=In%20memoriam%20Luigi%20Nono&aufirst=Hans&aulast=Abrahamsen&isbn=9788759826126%20(sewn)&isbn=8759826126%20(sewn)&date=%5B2012%5D&pub=Edition%20Wilhelm%20Hansen&place=%5BCopenhagen%5D","RequestMessage":"Borrow
-        Direct cannot fill this request at this time.  Please request through Interlibrary
-        Loan."}}}'
+      encoding: UTF-8
+      string: '{"Problem":{"ErrorMessage":"No result","ErrorCode":"PUBRI003"}}'
     http_version: 
-  recorded_at: Wed, 14 Jan 2015 21:00:13 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:35 GMT
 recorded_with: VCR 2.9.3

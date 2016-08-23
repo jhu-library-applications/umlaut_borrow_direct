@@ -20,6 +20,5 @@ group "test" do
   gem "minitest-vcr", ">= 1.0.2", "< 2"
   gem "vcr", "~> 2.9"
   gem "webmock", "~> 1.11"
+  gem 'pry'
 end
-
-
