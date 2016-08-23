@@ -1,15 +1,15 @@
 
   # Configure what service plugins are used by Umlaut. This skeleton file
-  # has been generated into your app to help you get started. 
+  # has been generated into your app to help you get started.
   #
-  # If a service has "disabled:true", it's currently turned off. 
+  # If a service has "disabled:true", it's currently turned off.
   #
   # Some services require local api key or connection details as config.
   # Most services take other options for custom configuration too, not
   # all options are neccesarily listed as examples here, see source
-  # or source-generated docs for more info.   
+  # or source-generated docs for more info.
 
-  # The services in the 'default' group are loaded every time. 
+  # The services in the 'default' group are loaded every time.
   # You can optionally create other groups of services, that can be loaded
   # by URL query params, or based on other request params. More info?
 
@@ -19,9 +19,9 @@ default:
         type: BorrowDirectAdaptor
         priority: 3
         # We use our VCRFilter to use dummy barcode/symbol with our recorded
-        # VCR cassettes, if available. 
-        #library_symbol: DUMMY_BD_LIBRARY_SYMBOL
-        #find_item_patron_barcode: DUMMY_BD_PATRON
+        # VCR cassettes, if available.
+        # library_symbol: DUMMY_BD_LIBRARY_SYMBOL
+        # find_item_patron_barcode: DUMMY_BD_PATRON
         library_symbol: "<%= defined?(VCRFilter) ? VCRFilter[:bd_library_symbol] : ENV["BD_LIBRARY_SYMBOL"] %>"
         find_item_patron_barcode: "<%= defined?(VCRFilter) ? VCRFilter[:bd_patron]  : ENV["BD_PATRON"] %>"
         html_query_base_url: https://catalyst.library.jhu.edu/borrow_direct

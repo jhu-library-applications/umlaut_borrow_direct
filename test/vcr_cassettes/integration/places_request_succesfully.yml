@@ -2,17 +2,17 @@
 http_interactions:
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/portal-service/user/authentication
+    uri: https://bdtest.relais-host.com/portal-service/user/authentication
     body:
       encoding: UTF-8
-      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DEMO","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
+      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:15 GMT
+      - Tue, 23 Aug 2016 19:15:13 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:16 GMT
+      - Tue, 23 Aug 2016 19:15:14 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
@@ -34,22 +34,22 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"AuthorizationId":"S1xFfOuF8dGTXdwTyREoLGWFhj8","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
+      string: '{"AuthorizationId":"GXZaUnp2LFM1vf7rXL9RyEejDcQ","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:16 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:14 GMT
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/dws/item/available?aid=S1xFfOuF8dGTXdwTyREoLGWFhj8
+    uri: https://bdtest.relais-host.com/dws/item/available?aid=GXZaUnp2LFM1vf7rXL9RyEejDcQ
     body:
       encoding: UTF-8
-      string: '{"PartnershipId":"DEMO","ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}]}'
+      string: '{"PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}]}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:16 GMT
+      - Tue, 23 Aug 2016 19:15:14 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -62,7 +62,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:19 GMT
+      - Tue, 23 Aug 2016 19:15:17 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -75,20 +75,20 @@ http_interactions:
         here to request this item from E-ZBorrow."},"NumberOfRecords":1,"PickupLocation":[{"PickupLocationCode":"A","PickupLocationDescription":"Main
         Library"}]}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:19 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:17 GMT
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/portal-service/user/authentication
+    uri: https://bdtest.relais-host.com/portal-service/user/authentication
     body:
       encoding: UTF-8
-      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DEMO","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
+      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:19 GMT
+      - Tue, 23 Aug 2016 19:15:17 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -101,7 +101,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:20 GMT
+      - Tue, 23 Aug 2016 19:15:18 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
@@ -110,15 +110,15 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"AuthorizationId":"Jt6nqhB3kiAxf1qGHskU6xKyNdk","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
+      string: '{"AuthorizationId":"ZXUDuiUNIF-TthBWA-WnLLBSL7Q","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:20 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:18 GMT
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/dws/item/add?aid=Jt6nqhB3kiAxf1qGHskU6xKyNdk
+    uri: https://bdtest.relais-host.com/dws/item/add?aid=ZXUDuiUNIF-TthBWA-WnLLBSL7Q
     body:
       encoding: UTF-8
-      string: '{"PartnershipId":"DEMO","ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}],"PickupLocation":"Main
+      string: '{"PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","ExactSearch":[{"Type":"ISBN","Value":"9789810743734"}],"PickupLocation":"Main
         Library"}'
     headers:
       User-Agent:
@@ -126,7 +126,7 @@ http_interactions:
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:20 GMT
+      - Tue, 23 Aug 2016 19:15:18 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -139,7 +139,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:24 GMT
+      - Tue, 23 Aug 2016 19:15:21 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -148,7 +148,7 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"RequestNumber":"DUMMY_BD_LIBRARY_SYMBOL-90000416"}'
+      string: '{"RequestNumber":"DUMMY_BD_LIBRARY_SYMBOL-90000430"}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:24 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:21 GMT
 recorded_with: VCR 2.9.3

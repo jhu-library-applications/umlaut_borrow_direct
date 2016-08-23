@@ -2,17 +2,17 @@
 http_interactions:
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/portal-service/user/authentication
+    uri: https://bdtest.relais-host.com/portal-service/user/authentication
     body:
       encoding: UTF-8
-      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DEMO","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
+      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:33 GMT
+      - Tue, 23 Aug 2016 19:15:35 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:34 GMT
+      - Tue, 23 Aug 2016 19:15:36 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Content-Length:
@@ -34,22 +34,59 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"AuthorizationId":"VtS7xEHlTnYSY7ALVWBYdYyUgCw","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
+      string: '{"AuthorizationId":"mFZp4JLmvywTObNA0I3f-4rrAsU","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:34 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:36 GMT
 - request:
     method: post
-    uri: DUMMY_BD_API_BASE/dws/item/available?aid=VtS7xEHlTnYSY7ALVWBYdYyUgCw
+    uri: https://bdtest.relais-host.com/portal-service/user/authentication
     body:
       encoding: UTF-8
-      string: '{"PartnershipId":"DEMO","ExactSearch":[{"Type":"ISBN","Value":"000000000"}]}'
+      string: '{"ApiKey":"DUMMY_BD_API_KEY","PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","UserGroup":"patron","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","PatronId":"DUMMY_BD_PATRON"}'
     headers:
       User-Agent:
       - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
       Accept:
       - "*/*"
       Date:
-      - Tue, 23 Aug 2016 15:48:34 GMT
+      - Tue, 23 Aug 2016 19:15:35 GMT
+      Content-Type:
+      - application/json
+      Accept-Language:
+      - en
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.4.1
+      Date:
+      - Tue, 23 Aug 2016 19:15:37 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Content-Length:
+      - '223'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"AuthorizationId":"zeOtQvzqPVZyrGbJaGqZajKzrL8","LibrarySymbol":"DUMMY_BD_LIBRARY_SYMBOL","Iso639_2_LangCode":"ENG","FirstName":"Barnaby","LastName":"Alter","AllowLoanAddRequest":true,"AllowCopyAddRequest":true,"AllowSelDelivLoanChange":true}'
+    http_version: 
+  recorded_at: Tue, 23 Aug 2016 19:15:37 GMT
+- request:
+    method: post
+    uri: https://bdtest.relais-host.com/dws/item/add?aid=mFZp4JLmvywTObNA0I3f-4rrAsU
+    body:
+      encoding: UTF-8
+      string: '{"PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","ExactSearch":[{"Type":"ISBN","Value":"121212"}],"PickupLocation":"one"}'
+    headers:
+      User-Agent:
+      - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
+      Accept:
+      - "*/*"
+      Date:
+      - Tue, 23 Aug 2016 19:15:36 GMT
       Content-Type:
       - application/json
       Accept-Language:
@@ -62,7 +99,44 @@ http_interactions:
       Server:
       - nginx/1.4.1
       Date:
-      - Tue, 23 Aug 2016 15:48:37 GMT
+      - Tue, 23 Aug 2016 19:15:39 GMT
+      Content-Type:
+      - application/json;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"Problem":{"ErrorMessage":"No result","ErrorCode":"PUBRI003"}}'
+    http_version: 
+  recorded_at: Tue, 23 Aug 2016 19:15:39 GMT
+- request:
+    method: post
+    uri: https://bdtest.relais-host.com/dws/item/available?aid=zeOtQvzqPVZyrGbJaGqZajKzrL8
+    body:
+      encoding: UTF-8
+      string: '{"PartnershipId":"DUMMY_BD_PARTNERSHIP_ID","ExactSearch":[{"Type":"ISBN","Value":"000000000"}]}'
+    headers:
+      User-Agent:
+      - ruby borrow_direct gem 1.2.0 (HTTPClient 2.8.0) https://github.com/jrochkind/borrow_direct
+      Accept:
+      - "*/*"
+      Date:
+      - Tue, 23 Aug 2016 19:15:37 GMT
+      Content-Type:
+      - application/json
+      Accept-Language:
+      - en
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx/1.4.1
+      Date:
+      - Tue, 23 Aug 2016 19:15:40 GMT
       Content-Type:
       - application/json;charset=UTF-8
       Transfer-Encoding:
@@ -73,5 +147,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"Problem":{"ErrorCode":"PUBFI002","ErrorMessage":"No result"}}'
     http_version: 
-  recorded_at: Tue, 23 Aug 2016 15:48:37 GMT
+  recorded_at: Tue, 23 Aug 2016 19:15:40 GMT
 recorded_with: VCR 2.9.3

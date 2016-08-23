@@ -1,4 +1,4 @@
 require 'borrow_direct'
-BorrowDirect::Defaults.api_base = (defined?(VCRFilter)) ? VCRFilter[:bd_api_base] : ENV["BD_API_BASE"]
-BorrowDirect::Defaults.api_key = (defined?(VCRFilter)) ? VCRFilter[:bd_api_key] : ENV["BD_API_KEY"]
-BorrowDirect::Defaults.partnership_id = (defined?(VCRFilter)) ? VCRFilter[:bd_partnership_id] : ENV["BD_PARTNERSHIP_ID"]
+BorrowDirect::Defaults.api_base = (ENV["BD_API_BASE"]) ? ENV["BD_API_BASE"] : 'https://bdtest.relais-host.com'
+BorrowDirect::Defaults.api_key = (ENV["BD_API_KEY"]) ? ENV["BD_API_KEY"] : 'DUMMY_BD_API_KEY'
+BorrowDirect::Defaults.partnership_id = (ENV["BD_PARTNERSHIP_ID"]) ? ENV["BD_PARTNERSHIP_ID"] : 'DUMMY_BD_PARTNERSHIP_ID'

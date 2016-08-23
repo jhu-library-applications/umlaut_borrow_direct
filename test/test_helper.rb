@@ -27,12 +27,14 @@ VCR.configure do |c|
 
   # BD API requests tend to have their distinguishing
   # features in a POSTed JSON request body
-  c.default_cassette_options = { :match_requests_on => [:method, :uri, :body] }
+  # c.default_cassette_options = { :match_requests_on => [:method, :uri, :body] }
+  c.default_cassette_options = { match_requests_on: [:method, :body, VCR.request_matchers.uri_without_param(:aid) ]}
+  c.filter_sensitive_data('https://bdtest.relais-host.com') { ENV['BD_API_BASE'] }
 end
 
 MinitestVcr::Spec.configure!
 
 VCRFilter.sensitive_data! :bd_library_symbol
 VCRFilter.sensitive_data! :bd_patron
+VCRFilter.sensitive_data! :bd_partnership_id
 VCRFilter.sensitive_data! :bd_api_key
-VCRFilter.sensitive_data! :bd_api_base
