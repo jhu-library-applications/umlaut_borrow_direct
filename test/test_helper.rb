@@ -34,3 +34,5 @@ MinitestVcr::Spec.configure!
 
 VCRFilter.sensitive_data! :bd_library_symbol
 VCRFilter.sensitive_data! :bd_patron
+VCRFilter.sensitive_data! :bd_api_key
+VCRFilter.sensitive_data! :bd_api_base
