@@ -10,6 +10,8 @@ gemspec
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
+gem 'umlaut', '>= 5.0.0', :github => "jhu-library-applications/umlaut", :branch => "rails-5-upgrade"
+
 
 # Gems that would normally be in application Gemfile
 gem 'jquery-rails'
